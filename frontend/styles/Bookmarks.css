@@ -1,0 +1,207 @@
+#dashboard{
+    display:grid;
+    grid-template-columns: 20% 80%;
+}
+#dashboard hr{
+    border-color: #fcfafa4b;
+}
+#dashboard nav {
+    padding: 1rem 1.5rem;
+    border-radius:15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    margin: 2rem 0;
+}
+#dashboard nav a{
+    outline:none;
+    text-decoration: none;
+    color:black;
+    text-align: center;
+    margin: 1rem;
+    display:block;
+}
+#dashboard nav div#user-profile{
+    display:flex;
+    justify-content: start;
+    column-gap:1rem;
+    align-items: center;
+}
+#dashboard nav div#user-profile span{
+    background-color: #972121;
+    border-radius:10px;
+    font-size:24px;
+    padding:0.5rem;
+    color:#FFF;
+    font-weight:bolder;
+}
+#dashboard nav div#user-profile p{
+    color:#3b3b3b;
+    font-weight: bolder;
+}
+#dashboard ul{
+    list-style:none;
+}
+#dashboard li{
+    width:100%;
+    border-radius:10px;
+    padding:1rem 1.5rem;
+    margin:1rem 0;
+    font-weight:600;
+    color:#6b6b6b;
+    display:flex;
+    justify-content: start;
+    align-items: center;
+    column-gap:15px;
+    cursor:pointer;
+}
+#dashboard li i{
+    font-size:22px;
+}
+#dashboard li:hover{
+    background-color: #972121;
+    color:#FFF;
+}
+
+/* DASHBOARD BODY */
+#dashboard-body{
+    margin:1rem;
+    padding: 1rem 3rem;
+}
+#dashboard-body input[type=text]{
+    width:50%;
+    padding:0.75rem;
+    font-size:18px;
+    font-weight:bold;
+    border-radius:10px;
+    outline:none;
+    border:none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    background-color:#fffbfb;
+}
+#filter-box{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 2rem 0
+}
+#filter-box a{
+    font-weight: bolder;
+    display: block;
+    text-decoration: none;
+    color: #3b3b3b
+}
+
+/* CARD CONTAINER MAY BE MOVED */
+#card-container{
+    display:grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    row-gap: 2rem;
+    column-gap: 2rem;
+}
+
+#filter-container ul{
+    position:fixed;
+    right:5%;
+    background-color:#FFF;
+    z-index:1;
+    border-radius:15px;
+}
+#filter-container ul li{
+    padding:0.5rem;
+    margin:0;
+    border-radius:0;
+}
+#filter-container ul li:last-child{
+    border-bottom-left-radius:15px;
+    border-bottom-right-radius:15px;
+}
+
+#filter-container ul li:first-child{
+    border-top-left-radius:15px;
+    border-top-right-radius:15px;
+}
+
+#media-type-selector{
+    margin:2rem 0;
+}
+#media-type-selector span{
+    margin: 0 0.5rem;
+    color: #3b3b3b;
+    font-weight: bold;
+    cursor:pointer;
+    padding:0.25rem 1rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    border-radius:5px;
+}
+#media-type-selector span.media-type-selected{
+    background-color:purple;
+    color:#FFF;
+}
+#media-type-selector span.media-type-selected::after{
+    content: " ONLY"
+}
+#dashboard nav > i{
+    display:none;
+}
+
+@media screen and (max-width: 1368px){
+    #card-container{
+        grid-template-columns: 33% 33% 33%;
+    }
+}
+@media screen and (max-width: 1168px){
+    #card-container{
+        grid-template-columns: 50% 50%;
+    }
+}
+@media screen and (max-width: 968px){
+    #dashboard{
+        grid-template-columns: 100%;
+    }
+    #dashboard nav > i{
+        display:block;
+        text-align:center;
+        font-size:24px;
+        border:1px solid #3b3b3b;
+        padding:1rem;
+        border-radius:5px;
+        cursor:pointer;
+        margin-bottom:1rem;
+    }
+    #dashboard nav > i:active{
+        background-color: #3b3b3b;
+        color:#FFF;
+    }
+    #dashboard-body{
+        padding: 1rem 0;
+        margin:0;
+    }
+    #dashboard-body input[type=text]{
+        width:100%;
+    }
+    #media-type-selector{
+        display:flex;
+        justify-content: start;
+        flex-wrap:wrap;
+        column-gap:0.5rem;
+        row-gap:0.5rem;
+    }
+    #media-type-selector span{
+        margin:0;
+    }
+    #filter-box{
+        flex-direction: column;
+        row-gap:2rem;
+        
+    }
+    #filter-container ul{
+        position:relative;
+        width:100%;
+        margin: auto auto;
+        right:0;
+    }
+}
+@media screen and (max-width:768px){
+    #card-container{
+        grid-template-columns: 100%;
+    }
+}
