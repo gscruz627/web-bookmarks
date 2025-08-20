@@ -1,9 +1,100 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 body{
-  background-color: #f3ebeb;
+  background-color: #ebf2fc;
 }
 #root{
   max-width:90%;
   margin:auto auto;
   font-family: 'Poppins', sans-serif;
+}
+.blue-button{
+    background-color: #266fd5;
+    color:#FFF;
+    font-weight: bolder;
+    font-size:20px;
+    border-radius:5px;
+    padding:0.5rem;
+    min-width:200px;
+    outline:none; border:none;
+}
+.full{
+  width:100%;
+}
+.blue-inverted-button{
+    background-color: #FFF;
+    color:#266fd5;
+    font-weight: bolder;
+    font-size:20px;
+    border-radius:5px;
+    padding:0.5rem;
+    min-width:200px;
+    border:1px solid #266fd5;
+    outline:none;
+}
+.blue-inverted-button:hover{
+  color:#FFF;
+  background-color: #266fd5;
+}
+.modal-box{
+    position:fixed;
+    z-index: 1000;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-box form{
+    background-color: #FFF;
+    padding:2rem;
+    border-radius:5px;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    width:30%;
+    margin: auto auto;
+}
+.modal-box form h2{
+    text-align: center;
+}
+.modal-box form label{
+    color: #3b3b3b;
+    font-weight:bolder;
+}
+.modal-box form input[type=text], .modal-box form select{
+    padding:0.5rem;
+    margin:1rem 0;
+    outline:none;
+    border:1px solid #b8b8b8;
+    border-radius:5px;
+    font-weight:18px;
+}
+.modal-box form button{
+    padding:0.5rem;
+    outline:none;
+    border:none;
+    background-color: #266fd5;
+    font-weight:bolder;
+    color:#FFF;
+    border-radius:5px;
+    font-size:18px;
+    margin:1rem 0;
+}
+.modal-box a{
+    text-align: center;
+    text-decoration: underline;
+    color:#d44545;
+    cursor:pointer;
+}
+.modal-box img{
+    width:30px;
+    margin: auto auto;
+}
+.sidebar-message{
+  color:#6d6d6d;
+  font-size:18px;
+  padding:1rem;
 }

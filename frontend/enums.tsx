@@ -1,10 +1,10 @@
 // @ts-ignore
 export enum MediaType{
-    Video,
-    Document,
-    Image,
-    Post,
-    None
+    Video = "Video",
+    Document = "Document",
+    Image = "Image",
+    Post = "Post",
+    None = "None"
 }
 
 // @ts-ignore

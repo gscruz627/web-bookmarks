@@ -1,133 +1,106 @@
 import { useState, useEffect, useRef } from "react";
 import Card from "../components/Card";
+import NewBookmark from "../components/NewBookmark"
 import { MediaType, DashboardSelection } from "../enums";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar"
 import "../styles/Bookmarks.css";
+import checkAuth from "../functions/auth";
+import Loading from "../components/Loading";
+import useSortedBookmarks from "../hooks/useSortedBookmarks";
+import FilterBox from "../components/FilterBox"
 export default function Bookmarks() {
 
-    const [dashboard, setDashboard] = useState<DashboardSelection>(DashboardSelection.All);
+    const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
-    const [showFilter, setShowFilter] = useState<boolean>(false);
-    const [showNav, setShowNav] = useState<boolean>(true);
-    const [vaultLocked, setVaultLocked] = useState<boolean>(true);
-    const filterBoxRef = useRef<HTMLDivElement | null>(null);
-    const filterButtonRef = useRef<HTMLAnchorElement | null>(null);
+    const [newBookmark, setNewBookmmark] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
+    const [error, setError] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+    const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
+    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
+    const navigate = useNavigate();
 
-    function handleVaultSubmit(e: any){
-        e.preventDefault();
-        setVaultLocked(false);
+    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+
+    async function loadBookmarks(){
+        try{
+            setLoading(true);
+            console.log(localStorage.getItem("refresh-token"))
+            await checkAuth(navigate);
+            console.log(localStorage.getItem("refresh-token"))
+            const userId = localStorage.getItem("userId");
+            const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${userId}&archived=false`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                }
+            });
+            if(!request.ok){
+                setError("Something wrong happened while getting your bookmarks");
+            }
+            const bookmarksResponse = await request.json();
+            setAllBookmarks(bookmarksResponse);
+            setBookmarks(bookmarksResponse);
+        } catch(errorMsg:any){
+            setError(errorMsg.message);
+        } finally{
+            setLoading(false);
+        }
     }
-    useEffect(() => {
-        function handleResize() {
-            if (window.innerWidth > 768) {
-                setShowNav(true);
+
+    async function archive(id:number){
+        try{
+            console.log("HA")
+            const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization" : `Bearer ${localStorage.getItem('access-token')}`,
+                    "Content-Type" : "Application/json",
+                    "Accept": "application/json",
+                },
+                body: JSON.stringify({
+                    archived: true
+                })
+            });
+            if(!request.ok){
+                console.log("somethiing went wrong");
+                setError("Something went wrong while archiving, please try again.");
+                return;
             }
+            await loadBookmarks();
+        } catch(error: any){
+            console.log("something weent wrong");
+            setError(error.Message)
         }
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                filterBoxRef.current &&
-                !filterBoxRef.current.contains(event.target as Node) &&
-                filterButtonRef.current &&
-                !filterButtonRef.current.contains(event.target as Node)
-            ) {
-                setShowFilter(false);
-            }
-        }
-
-        if (showFilter) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [showFilter]);
-
-    useEffect(() => {if(dashboard !== DashboardSelection.Private) setVaultLocked(true)}, [dashboard])
+    }
+    useEffect( () => {
+        loadBookmarks();
+    }, [])
 
     return (
+        <>
+        {loading && <Loading/>}
+        {newBookmark &&
+            <NewBookmark onExit={() =>setNewBookmmark(false)} onAdd={setAllBookmarks}/>
+        }
         <div id="dashboard">
-            <nav>
-                <Link to="/"><h3>Web Bookmarks </h3></Link>
-                <i onClick={() => setShowNav(prev => !prev)} className="fa-solid fa-bars"></i>
-                { showNav && 
-                    <div id="show-nav">
-                    <div id="user-profile">
-                        <span>GL</span>
-                        <p>Gustavo L.</p>
-                    </div>
-                    <ul>
-                        <li onClick={() => setDashboard(DashboardSelection.All)}><i className="fa-solid fa-bookmark"></i>All Bookmarks</li>
-                        <li onClick={() => setDashboard(DashboardSelection.Archive)}><i className="fa-solid fa-trash-can"></i>Archive</li>
-                        <li onClick={() => setDashboard(DashboardSelection.Private)}><i className="fa-solid fa-eye-slash"></i>Private Vault</li>
-                        <li onClick={() => setDashboard(DashboardSelection.Shared)}><i className="fa-solid fa-share-from-square"></i>Shared</li>
-                    </ul>
-
-                    <hr/>
-                    <ul>
-                        <li><i className="fa-solid fa-folder"></i>Folder one</li>
-                        <li><i className="fa-solid fa-folder"></i>Folder two</li>
-                    </ul>
-                    
-                    <hr/>
-                    <ul>
-                        <li><i className="fa-solid fa-right-from-bracket"></i>Log Out</li>
-                        <li><i className="fa-solid fa-moon"></i>Dark Theme</li>
-                    </ul>
-                    </div>
-                }
-            </nav>
+            <Sidebar/>
 
             <div id="dashboard-body">
-                <form>
-                    <input type="text" name="search" id="search" placeholder="Search"/>
-                </form>
+            {error && <div className="error-box">{error}</div> }
+                <div id="dashboard-body-nav">
+                    <form>
+                        <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
+                    </form>
 
-                {dashboard === DashboardSelection.Private && vaultLocked && (
-                    <div className="center-box">
-                        <form onSubmit={handleVaultSubmit}>
-                            <h3>Unlock your vault first</h3>
-                            <label htmlFor="vaultPwd">Passphrase: </label>
-                            <input type="text" name="vaultPwd" id="vaultPwd" style={{width: "100%"}}/>
+                    <button onClick={() => setNewBookmmark(true)}>New Bookmark <i style={{}} className="fa-solid fa-circle-plus"></i> </button>
+                </div>
 
-                            <button type="submit">Access</button>
-                        </form>
-                    </div>
-                )}
-
-                {(dashboard !== DashboardSelection.Private || !vaultLocked) &&
-                <>
-                <div id="filter-box">
-                    <h3>{dashboard}</h3>
-                    <a ref={filterButtonRef}
-                    href="#"
-                    role="button"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setShowFilter(prev => !prev);
-                    }}
-                    >
-                        <i className="fa-regular fa-calendar-days"></i> Newest to Oldest (Added)
-                    </a>
-                    
-                    </div>
-                    <div ref={filterBoxRef} id="filter-container" style={{display: showFilter ? "block" : "none"}}>
-                        <ul>
-                            <li><i className="fa-regular fa-calendar-days"></i> Newest to Oldest (Added)</li>
-                            <li><i className="fa-regular fa-calendar-days"></i> Oldest to Newest (Added)</li>
-                            <li><i className="fa-regular fa-window-maximize"></i> By Base Website (A-Z)</li>
-                            <li><i className="fa-solid fa-arrow-down-a-z"></i> Alphabetically (A-Z)</li>
-                            <li><i className="fa-solid fa-arrow-up-a-z"></i> Reversed Alphabetically (Z-A)</li>
-                        </ul>
-                    </div>
+                <FilterBox filter={filter} setFilter={setFilter}/>
+                
 
                 <div id="media-type-selector">
                     <span className={mediaFilter === MediaType.Video ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Video ? MediaType.None : MediaType.Video)}><i className="fa-solid fa-file-video"></i> Video</span>
@@ -136,15 +109,21 @@ export default function Bookmarks() {
                     <span className={mediaFilter === MediaType.Post ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Post ? MediaType.None : MediaType.Post)}><i className="fa-solid fa-comments"></i> Post</span>
                 </div>
                 <div id="card-container">
-                    <Card iconUrl="" title="Title" folders={["title", "boy"]} link="" baseSite="Youtube" mediaType={MediaType.Video} mediaUrl="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F0%2F09%2FYouTube_full-color_icon_(2017).svg%2F2560px-YouTube_full-color_icon_(2017).svg.png&f=1&nofb=1&ipt=a7f13e354644a2fc68fbc00c468d66e530a493f3eb37ac473d8a5a836c854432"/>
-                    <Card iconUrl="" title="Title" folders={["title", "boy"]} link="" baseSite="Youtube" mediaType={MediaType.Video} archived={true}/>
-                    <Card iconUrl="" title="Title" folders={["title", "boy"]} link="" baseSite="Youtube" mediaType={MediaType.Video}/>
-                    <Card iconUrl="" title="Title" folders={["title", "boy"]} link="" baseSite="Youtube" mediaType={MediaType.Video}/>
+                    {sortedBookmarks.length <= 0 ?
+                    
+                        <div style={{flexWrap: "wrap", textAlign: "center", gridColumn: "1 / -1", width:"100%", height:"400%", fontSize: "36px", display:"flex", justifyContent:"center", alignContent:"center", flexDirection:"column"}}>
+                            <i className="fa-regular fa-bookmark" style={{display: "block"}}></i>
+                            <p> No Bookmarks found</p>
+                        </div>
+                    :
+                        sortedBookmarks.map((bookmark) => (
+                            <Card archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                        ))
+                    }
                 </div>
-                </>
-                }
             </div>
 
         </div>
+        </>
     )
 }

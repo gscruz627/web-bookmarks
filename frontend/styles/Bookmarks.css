@@ -6,9 +6,11 @@
     border-color: #fcfafa4b;
 }
 #dashboard nav {
+    background-color: #FFF;
     padding: 1rem 1.5rem;
     border-radius:15px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 8px rgba(167, 167, 167, 0.2);
+
     margin: 2rem 0;
 }
 #dashboard nav a{
@@ -26,7 +28,9 @@
     align-items: center;
 }
 #dashboard nav div#user-profile span{
-    background-color: #972121;
+    background-color: #266fd5;
+    min-width:45px;
+    text-align: center;
     border-radius:10px;
     font-size:24px;
     padding:0.5rem;
@@ -57,7 +61,7 @@
     font-size:22px;
 }
 #dashboard li:hover{
-    background-color: #972121;
+    background-color: #266fd5;
     color:#FFF;
 }
 
@@ -65,6 +69,14 @@
 #dashboard-body{
     margin:1rem;
     padding: 1rem 3rem;
+}
+#dashboard-body-nav{
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+}
+#dashboard-body form{
+    width:1000px;
 }
 #dashboard-body input[type=text]{
     width:50%;
@@ -74,8 +86,22 @@
     border-radius:10px;
     outline:none;
     border:none;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 8px rgba(167, 167, 167, 0.2);
+
     background-color:#fffbfb;
+}
+#dashboard-body-nav button{
+    background-color: #266fd5;
+    color:#FFF;
+    font-weight: bolder;
+    font-size:20px;
+    border-radius:5px;
+    padding:0.5rem;
+    min-width:200px;
+    outline:none; border:none;
+}
+#dashboard-body-nav button:active{
+    filter: brightness(85%)
 }
 #filter-box{
     display: flex;
@@ -129,7 +155,8 @@
     font-weight: bold;
     cursor:pointer;
     padding:0.25rem 1rem;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    background-color: #FFF;
+    box-shadow: 0 0 8px rgba(167, 167, 167, 0.2);
     border-radius:5px;
 }
 #media-type-selector span.media-type-selected{
