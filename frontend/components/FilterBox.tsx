@@ -1,16 +1,59 @@
 import { useState, useRef, useEffect } from "react";
+import EditTitle from "../components/EditTitle"
 
 type Props = {
     filter: string,
     setFilter: (filter: string) => void,
+    sectionTitle: string,
+    folderId?: string,
+    teamId?: string,
+    onExit?: any
 }
 
-export default function FilterBox({filter, setFilter}: Props) {
+export default function FilterBox({onExit, filter, setFilter, sectionTitle, folderId, teamId}: Props) {
+
+    const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const [showFilter, setShowFilter] = useState<boolean>(false);
+    const [editing, setEditing] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+    const titleRef = useRef<HTMLInputElement>(null);
 
     const filterBoxRef = useRef<HTMLDivElement | null>(null);
     const filterButtonRef = useRef<HTMLAnchorElement | null>(null);
 
+    async function handleNameChange(e: React.FormEvent){
+        e.preventDefault();
+        setLoading(true);
+        let route:string = SERVER_URL;
+        if(folderId != null){
+            route += `/api/folders/${folderId}`
+        } else {
+            route += `/api/teams/${teamId}`
+        }
+        try{
+            const request = await fetch(route, {
+                method: "PATCH",
+                headers: {
+                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`,
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    title: titleRef.current?.value
+                })
+            });
+            if(!request.ok){
+                setError("Something went wrong while changing the name of this bookmark: " + request.status)
+            }
+            setEditing(false);
+            onExit();
+        } catch(error: any){
+            setError("Server error: " + error.message);
+        } finally{
+            setLoading(false);
+        }
+
+    }
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (
@@ -36,8 +79,18 @@ export default function FilterBox({filter, setFilter}: Props) {
 
     return (
         <>
+        {editing && <EditTitle onExit={() => setEditing(false)} error={error} titleRef={titleRef} handleNameChange={handleNameChange}/>}
         <div id="filter-box">
-            <h3>All Bookmarks</h3>
+            <h3>{sectionTitle}
+                {(!["All Bookmarks", "Archived Bookmarks", "Private Vault"].includes(sectionTitle)) && <span onClick={() => setEditing(true)}>
+                    <i style={{
+                        fontSize: "24px",
+                        cursor: "pointer",
+                        color: "#f2a42f",
+                        marginLeft: "1rem"
+                    }} className="fa-solid fa-square-pen"></i>
+                    </span>}
+            </h3>
             <a ref={filterButtonRef}
                 href="#"
                 role="button"

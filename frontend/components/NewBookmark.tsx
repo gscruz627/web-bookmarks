@@ -6,9 +6,10 @@ import Loading from "./Loading";
 type Props = {
   onExit: () => void;
   onAdd: (prev:any) => void;
+  teamId?: string
 }
 
-export default function NewBookmark({onExit, onAdd}: Props) {
+export default function NewBookmark({onExit, onAdd, teamId}: Props) {
 
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
   const token = localStorage.getItem("access-token");
@@ -90,6 +91,7 @@ export default function NewBookmark({onExit, onAdd}: Props) {
             "link" : linkRef.current?.value,
             "baseSite": websiteRef.current?.value,
             "mediaType": mediaSelectionRef.current?.value,
+            "teamId" : teamId ?? null
           })
         })
         setError("");
@@ -113,7 +115,7 @@ export default function NewBookmark({onExit, onAdd}: Props) {
     {loading && <Loading/>}
     <div className="modal-box">
       <form onSubmit={handleSubmit}>
-        <h2>New Bookmark</h2>
+        <h2>New Bookmark {teamId && " For Team"}</h2>
         <a role="button" onClick={onExit}>Cancel</a>
         {error && <div className="error-box">{error} <span onClick={() => setError("")}>X</span></div>}
         <label htmlFor="title">Title: </label>

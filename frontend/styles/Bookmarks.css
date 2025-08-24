@@ -100,6 +100,9 @@
     min-width:200px;
     outline:none; border:none;
 }
+#dashboard-body-nav button.just-button{
+    min-width:50px;
+}
 #dashboard-body-nav button:active{
     filter: brightness(85%)
 }

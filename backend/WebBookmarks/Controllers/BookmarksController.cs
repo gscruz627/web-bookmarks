@@ -35,7 +35,7 @@ namespace WebBookmarks.Controllers
                     bookmarksQueryable = bookmarksQueryable.Where(b => b.AuthorID == userId);
                 } else
                 {
-                    return Forbid("You cannot access this content");
+                    return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
                 }
             }
             if(archived)
@@ -57,7 +57,7 @@ namespace WebBookmarks.Controllers
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if(loggedInUserId != bookmark.AuthorID)
             {
-                return Forbid("You cannot access this content");
+                return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
             }
             if (bookmark is null) { return  NotFound(); }
 
@@ -80,11 +80,20 @@ namespace WebBookmarks.Controllers
                 Link = bookmarkDTO.Link,
                 MediaType = bookmarkDTO.MediaType,
                 Archived = false,
-                AuthorID = userId,
-                Author = user,
                 DateAdded = DateTime.UtcNow
             };
-
+            if(bookmarkDTO.TeamId is null)
+            {
+                bookmark.AuthorID = userId;
+                bookmark.Author = user;
+            } else
+            {
+                Team? team = await _dbcontext.Teams.Include(t => t.Members).FirstOrDefaultAsync( t => t.Id == bookmarkDTO.TeamId);
+                if(team is null) { return BadRequest("Team does not exist"); }
+                if (!(team.Members.Contains(user))) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
+                bookmark.TeamID = bookmarkDTO.TeamId;
+                bookmark.Team = team;
+            }
             await _dbcontext.Bookmarks.AddAsync(bookmark);
             await _dbcontext.SaveChangesAsync();
 
@@ -96,10 +105,11 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<Bookmark>> Patch(Guid id, [FromBody] BookmarkPatchDTO patchDTO)
         {
             Bookmark? bookmark = await _dbcontext.Bookmarks.FindAsync(id);
+            if(bookmark is null) { return NotFound(); }
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if(loggedInUserId != bookmark.AuthorID)
             {
-                return Forbid("You cannot access this content");
+                return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
             }
             if (bookmark is null) { return NotFound(); }
 
@@ -108,10 +118,28 @@ namespace WebBookmarks.Controllers
             if(patchDTO.BaseSite is not null) { bookmark.BaseSite = patchDTO.BaseSite; }
             if(patchDTO.Title is not null) { bookmark.Title = patchDTO.Title; }
             if(patchDTO.MediaType is not null) { bookmark.MediaType = patchDTO.MediaType; }
-            if(patchDTO.Archived is not null) { bookmark.Archived = patchDTO.Archived ?? false;  }
+            if(patchDTO.Archived is not null) { 
+                bookmark.Archived = patchDTO.Archived ?? false;  
+            }
 
             await _dbcontext.SaveChangesAsync();
             return Ok(bookmark);
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Bookmark? bookmark = await _dbcontext.Bookmarks.Include(b => b.Folders).FirstOrDefaultAsync(b => b.Id == id);
+
+            if (bookmark is null) { return NotFound(); }
+            if (bookmark.AuthorID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content"); }
+
+            bookmark.Folders.Clear();
+            _dbcontext.Bookmarks.Remove(bookmark);
+            await _dbcontext.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

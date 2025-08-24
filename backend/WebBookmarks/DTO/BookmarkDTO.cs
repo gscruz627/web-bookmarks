@@ -7,5 +7,6 @@
         public string Link { get; set; }
         public string BaseSite { get; set; }
         public string MediaType { get; set; }
+        public Guid? TeamId { get; set; }
     }
 }

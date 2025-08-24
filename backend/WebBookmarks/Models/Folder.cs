@@ -9,7 +9,6 @@ namespace WebBookmarks.Models
         public Guid OwnerID { get; set; }
         public User Owner { get; set; }
 
-        [JsonIgnore]
         public List<Bookmark> Bookmarks { get; set; } = [];
     }
 }

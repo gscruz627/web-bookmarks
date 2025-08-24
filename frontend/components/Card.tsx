@@ -3,8 +3,9 @@ import {MediaType} from "../enums"
 import "../styles/Card.css"
 import checkAuth from "../functions/auth";
 import { useNavigate } from "react-router-dom";
+import EditBookmark from "../components/EditBookmark"
 interface props{
-    id: number,
+    id: string,
     archive?: () => void;
     iconUrl: string,
     title: string,
@@ -13,9 +14,10 @@ interface props{
     baseSite: string,
     mediaType: MediaType,
     archived?: boolean,
+    bookmark: any
     onExit?: () => void
 }
-export default function Card({onExit, id, archive, baseSite, title, iconUrl, folders, link, mediaType, archived}: props) {
+export default function Card({bookmark, onExit, id, archive, baseSite, title, iconUrl, folders, link, mediaType, archived}: props) {
 
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const [addToFolder, setAddToFolder] = useState<boolean>(false);
@@ -23,6 +25,7 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
     const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
     const [foldersList, setFoldersList] = useState<Array<any>>([]);
+    const [editing, setEditing] = useState<boolean>(false);
 
     async function loadFolders(){
         try{
@@ -30,6 +33,7 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
             const request = await fetch(`${SERVER_URL}/api/folders?userId=${userId}`, {
                 method: "GET",
                 headers: {
+                    "Content-type" : "text/plain",
                     "Authorization": `Bearer ${localStorage.getItem("access-token")}`,
                     "Accept" : "Application/json"
                 }
@@ -41,7 +45,8 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
         }
     }
 
-    async function handleAddToFolder(){
+    async function handleAddToFolder(e: React.FormEvent){
+        e.preventDefault();
         const folderId: string | undefined = folderRef.current?.value;
         try{
             await checkAuth(navigate);
@@ -53,13 +58,13 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
                     "Authorization" : `Bearer ${localStorage.getItem("access-token")}`
                 },
                 body: JSON.stringify({
-                    bookmarkId: id
+                    "bookmarkID": id
                 })
             });
             if(!request.ok){
                 alert("something went wrong while adding this bookmark to this folder");
             }
-            onExit?.();
+            setAddToFolder(false);
         } catch(error:any){
             alert(error.message);
         }
@@ -70,16 +75,19 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
     }, [])
     return (
         <>
+        {editing && <EditBookmark onExit={() => setEditing(false)} onAdd={() => onExit?.()} cardInfo={bookmark} />}
         {addToFolder && 
             <div className="modal-box">
                 <form onSubmit={handleAddToFolder}>
-                    <h3>Add to a Folder</h3>
+                    <h2>Add to a Folder</h2>
+                    <a role="button" onClick={() => setAddToFolder(false)}>Cancel</a>
                     <label htmlFor="folder">Folder: </label>
                     <select id="folder" ref={folderRef}>
                         {foldersList && foldersList.map( (folder:any) => (
                             <option value={folder.id}>{folder.title}</option>
                         ))}
                     </select>
+                    <button type="submit">Add</button>
                 </form>
             </div>}
         <div>
@@ -99,9 +107,10 @@ export default function Card({onExit, id, archive, baseSite, title, iconUrl, fol
             </div>
         </a>
         {!archived ?
-            <div className="button-container-two">
+            <div className="button-container-three">
                 <button onClick={archive} className="archive-button"><i className="fa-solid fa-trash-can"/> &nbsp; Archive</button>
-                <button onClick={() => setAddToFolder(true)} className="restore-button"><i className="fa-solid fa-circle-plus"></i> Add To Folder</button>
+                <button onClick={() => setAddToFolder(true)} className="restore-button"><i className="fa-solid fa-circle-plus"></i> &nbsp;Folder</button>
+                <button onClick={() => setEditing(true)} className="edit-button"><i className="fa-solid fa-square-pen"></i></button>
             </div>
             :
             <div className="button-container-two">

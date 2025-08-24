@@ -69,7 +69,7 @@ export default function ArchivedBookmarks({}: Props) {
                     <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                 </form>
             </div>
-            <FilterBox filter={filter} setFilter={setFilter}/>
+            <FilterBox filter={filter} setFilter={setFilter} sectionTitle="Archived Bookmarks"/>
 
             <div id="media-type-selector">
                 <span className={mediaFilter === MediaType.Video ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Video ? MediaType.None : MediaType.Video)}><i className="fa-solid fa-file-video"></i> Video</span>
@@ -86,7 +86,7 @@ export default function ArchivedBookmarks({}: Props) {
                     </div>
                 :
                     sortedBookmarks.map((bookmark:any) => (
-                        <Card id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                        <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
                     ))
                 }
                     </div>

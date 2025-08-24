@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using WebBookmarks.Data;
 using WebBookmarks.DTO;
+using WebBookmarks.Migrations;
 using WebBookmarks.Models;
 
 namespace WebBookmarks.Controllers
@@ -80,6 +82,7 @@ namespace WebBookmarks.Controllers
         }
 
         [HttpPost("refresh-token")]
+       
         public async Task<ActionResult<TokensDTO>> RefreshToken(RefreshTokenDTO tokenDTO)
         {
             User? user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.RefreshToken == tokenDTO.RefreshToken);
@@ -108,6 +111,57 @@ namespace WebBookmarks.Controllers
             await _dbcontext.SaveChangesAsync();
             return Ok(tokensDTO);
         }
+
+
+        [HttpPatch("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Patch(Guid id, [FromBody] UserPatchDTO userDTO)
+        {
+            Guid loggedIdUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            User? user = await _dbcontext.Users.FindAsync(id);
+            if(user is null) { return NotFound(); }
+            if(user.Id != loggedIdUserId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
+
+            User? checkUser = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
+            if (checkUser is not null)
+            {
+                return Conflict("Another user already has this username");
+            }
+            user.Username = userDTO.Username;
+            await _dbcontext.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            if(loggedInUserId != id)
+            {
+                return Forbid("You cannot execute this action");
+            }
+            User? user = await _dbcontext.Users.Include(u => u.OwnedTeams)
+                   .Include(u => u.Teams)
+                   .Include(u => u.Bookmarks)// member of other teams
+                   .FirstOrDefaultAsync(u => u.Id == id);
+            if(user is null) { return NotFound(); }
+            _dbcontext.Teams.RemoveRange(user.OwnedTeams);
+
+            List<Folder> folders = await _dbcontext.Folders.Where(f => f.OwnerID == id).ToListAsync();
+            _dbcontext.Folders.RemoveRange(folders);
+            _dbcontext.Bookmarks.RemoveRange(user.Bookmarks);
+            foreach(Team team in user.Teams.ToList())
+            {
+                team.Members.Remove(user);
+            }
+            _dbcontext.Users.Remove(user);
+            await _dbcontext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         [NonAction]
         public string GetRefreshToken()

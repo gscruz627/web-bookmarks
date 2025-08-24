@@ -22,6 +22,36 @@ namespace WebBookmarks.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookmarkFolder", b =>
+                {
+                    b.Property<Guid>("BookmarksId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FoldersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookmarksId", "FoldersId");
+
+                    b.HasIndex("FoldersId");
+
+                    b.ToTable("BookmarkFolder");
+                });
+
+            modelBuilder.Entity("TeamUser", b =>
+                {
+                    b.Property<Guid>("MembersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MembersId", "TeamsId");
+
+                    b.HasIndex("TeamsId");
+
+                    b.ToTable("TeamUser");
+                });
+
             modelBuilder.Entity("WebBookmarks.Models.Bookmark", b =>
                 {
                     b.Property<Guid>("Id")
@@ -31,7 +61,7 @@ namespace WebBookmarks.Migrations
                     b.Property<bool>("Archived")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("AuthorID")
+                    b.Property<Guid?>("AuthorID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BaseSite")
@@ -40,13 +70,6 @@ namespace WebBookmarks.Migrations
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("FolderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.PrimitiveCollection<string>("Folders")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IconURL")
                         .IsRequired()
@@ -60,6 +83,12 @@ namespace WebBookmarks.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Private")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("TeamID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -68,7 +97,7 @@ namespace WebBookmarks.Migrations
 
                     b.HasIndex("AuthorID");
 
-                    b.HasIndex("FolderId");
+                    b.HasIndex("TeamID");
 
                     b.ToTable("Bookmarks");
                 });
@@ -91,6 +120,26 @@ namespace WebBookmarks.Migrations
                     b.HasIndex("OwnerID");
 
                     b.ToTable("Folders");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.Team", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OwnerID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("WebBookmarks.Models.User", b =>
@@ -121,19 +170,49 @@ namespace WebBookmarks.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("WebBookmarks.Models.Bookmark", b =>
+            modelBuilder.Entity("BookmarkFolder", b =>
                 {
-                    b.HasOne("WebBookmarks.Models.User", "Author")
-                        .WithMany("Bookmarks")
-                        .HasForeignKey("AuthorID")
+                    b.HasOne("WebBookmarks.Models.Bookmark", null)
+                        .WithMany()
+                        .HasForeignKey("BookmarksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebBookmarks.Models.Folder", null)
+                        .WithMany()
+                        .HasForeignKey("FoldersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TeamUser", b =>
+                {
+                    b.HasOne("WebBookmarks.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WebBookmarks.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.Bookmark", b =>
+                {
+                    b.HasOne("WebBookmarks.Models.User", "Author")
                         .WithMany("Bookmarks")
-                        .HasForeignKey("FolderId");
+                        .HasForeignKey("AuthorID");
+
+                    b.HasOne("WebBookmarks.Models.Team", "Team")
+                        .WithMany("Bookmarks")
+                        .HasForeignKey("TeamID");
 
                     b.Navigation("Author");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("WebBookmarks.Models.Folder", b =>
@@ -147,7 +226,18 @@ namespace WebBookmarks.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("WebBookmarks.Models.Folder", b =>
+            modelBuilder.Entity("WebBookmarks.Models.Team", b =>
+                {
+                    b.HasOne("WebBookmarks.Models.User", "Owner")
+                        .WithMany("OwnedTeams")
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.Team", b =>
                 {
                     b.Navigation("Bookmarks");
                 });
@@ -155,6 +245,8 @@ namespace WebBookmarks.Migrations
             modelBuilder.Entity("WebBookmarks.Models.User", b =>
                 {
                     b.Navigation("Bookmarks");
+
+                    b.Navigation("OwnedTeams");
                 });
 #pragma warning restore 612, 618
         }

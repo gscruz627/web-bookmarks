@@ -11,12 +11,16 @@ namespace WebBookmarks.Models
         public string BaseSite { get; set; }
         public string MediaType { get; set; }
         public bool Archived { get; set; }
+        public bool Private { get; set; } = false;
         public DateTime DateAdded { get; set; } = DateTime.MinValue;
 
         [JsonIgnore]
-        public List<Guid> Folders { get; set; } = [];
+        public List<Folder> Folders { get; set; } = [];
+        
+        public Guid? AuthorID { get; set; }
+        public User? Author { get; set; }
 
-        public Guid AuthorID { get; set; }
-        public User Author { get; set; }
+        public Guid? TeamID { get; set; }
+        public Team? Team { get; set; }
     }
 }

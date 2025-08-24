@@ -39,10 +39,15 @@ namespace WebBookmarks.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Folder>> GetById([FromQuery] Guid id)
+        [Authorize]
+        public async Task<ActionResult<Folder>> GetById(Guid id)
         {
-            Folder? folder = await _dbcontext.Folders.FindAsync(id);
+            Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Folder? folder = await _dbcontext.Folders.Include(f => f.Bookmarks).FirstOrDefaultAsync(f => f.Id == id);
+            
             if(folder is null) { return NotFound(); }
+            if(folder.OwnerID != loggedInUserId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content"); }
+
             return Ok(folder);
         }
 
@@ -66,26 +71,56 @@ namespace WebBookmarks.Controllers
             return CreatedAtAction(nameof(Get), new { folder.Id }, folder);
         }
 
-        [HttpPost("{id:guid}/bookmarks")]
+        [HttpPatch("{id:guid}")]
         [Authorize]
-        public async Task<ActionResult<Folder>> AddBookmarkToFolder([FromQuery] Guid Id, [FromBody] Guid bookmarkId)
+        public async Task<ActionResult<Folder>> ChangeTitle(Guid id,[FromBody] NameDTO folderDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbcontext.Users.FindAsync(userId))!;
+            Folder? folder = await _dbcontext.Folders.FindAsync(id);
+            if(folder is null) { return NotFound(); }
+            if(folder.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
+
+            folder.Title = folderDTO.Title;
+            await _dbcontext.SaveChangesAsync();
+
+            return Ok(folder);
+        } 
+
+        [HttpPost("{id:guid}/bookmarks")]
+        [Authorize]
+        public async Task<ActionResult<Folder>> AddBookmarkToFolder(Guid Id, [FromBody] BookmarkToFolderDTO contentDTO)
+        {
+            Guid parsedBookmarkIid = Guid.Parse(contentDTO.BookmarkID);
+            Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             Folder? folder = await _dbcontext.Folders.FindAsync(Id);
             if(folder is null) { return NotFound(); }
 
-            if(folder.OwnerID != userId) { return Forbid("You cannot access this content"); }
+            if(folder.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content"); }
 
-            Bookmark? bookmark = await _dbcontext.Bookmarks.FindAsync(bookmarkId);
+            Bookmark? bookmark = await _dbcontext.Bookmarks.FindAsync(parsedBookmarkIid);
             if(bookmark is null) { return NotFound(); }
-            if(bookmark.AuthorID != userId) { return Forbid("You cannot access this content"); }
+            if(bookmark.AuthorID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content"); }
 
             folder.Bookmarks.Add(bookmark);
             await _dbcontext.SaveChangesAsync();
 
             return Ok(folder);
+        }
+
+        [HttpDelete("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Folder? folder = await _dbcontext.Folders.Include(f => f.Bookmarks).FirstOrDefaultAsync(f => f.Id == id);
+            if(folder is null) { return NotFound(); }
+            if(folder.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content."); }
+
+            folder.Bookmarks.Clear();
+            _dbcontext.Folders.Remove(folder);
+            await _dbcontext.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

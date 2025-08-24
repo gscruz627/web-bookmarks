@@ -65,12 +65,14 @@ body{
     font-weight:bolder;
 }
 .modal-box form input[type=text], .modal-box form select{
-    padding:0.5rem;
-    margin:1rem 0;
-    outline:none;
-    border:1px solid #b8b8b8;
-    border-radius:5px;
-    font-weight:18px;
+    padding:0.5rem !important;
+    margin:1rem 0 !important;
+    outline:none !important;
+    border:1px solid #b8b8b8 !important;
+    border-radius:5px !important;
+    font-size:16px !important;
+    width:100% !important;
+    font-weight:bold !important;
 }
 .modal-box form button{
     padding:0.5rem;
@@ -97,4 +99,19 @@ body{
   color:#6d6d6d;
   font-size:18px;
   padding:1rem;
+}
+button i{
+  font-size:16px;
+}
+.modal-box ul{
+  list-style-type:none;
+  margin-top: 1rem;
+}
+.modal-box li{
+  font-size:18px;
+  border-top: 1px solid #b8b8b8;
+  padding: 1rem 0;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
 }

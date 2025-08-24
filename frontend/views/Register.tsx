@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Auth.css"
+import Loading from "../components/Loading";
 
 type Props = {}
 
@@ -13,10 +14,12 @@ export default function Register({}: Props) {
     const [password, setPassword] = useState<string>("");
     const [passwordCheck, setPasswordCheck] = useState<string>("");
     const [error, setError] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     async function handleSubmit(e: React.FormEvent){
         
         e.preventDefault();
+        setLoading(true);
         try{
             const request: Response = await fetch(`${SERVER_URL}/api/users`, {
                 method: "POST",
@@ -28,19 +31,16 @@ export default function Register({}: Props) {
                     password: password
                 })
             });
-            const tokens: any = await request.json();
             if(!request.ok){
-                setError(tokens);
+                setError("Something went wrong with registering your account. Reload & try again.");
                 return;
             }
-            localStorage.setItem("access-token", tokens.accessToken);
-            localStorage.setItem("refresh-token", tokens.refreshToken);
             navigate("/login");
         } catch(errorMsg:any) {
             setError(errorMsg.message);
+        } finally{
+            setLoading(false);
         }
-
-
 
     }
     useEffect( () => {
@@ -54,6 +54,8 @@ export default function Register({}: Props) {
         }
     }, [password, passwordCheck]);
     return (
+        <>
+        {loading && <Loading/>}
         <div className="center-box">
             <h2>Web<br/> Bookmarks</h2>
             <form onSubmit={handleSubmit}>
@@ -69,5 +71,6 @@ export default function Register({}: Props) {
                 <Link to="/login"><small>Log In instead.</small></Link>
             </form>
         </div>
+        </>
     )
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebBookmarks.Models
 {
@@ -13,5 +14,12 @@ namespace WebBookmarks.Models
 
         [JsonIgnore]
         public List<Bookmark> Bookmarks { get; set; } = [];
+
+        [JsonIgnore]
+        public List<Team> Teams { get; set; } = [];
+
+        [JsonIgnore]
+        [InverseProperty("Owner")]
+        public List<Team> OwnedTeams { get; set; } = [];
     }
 }

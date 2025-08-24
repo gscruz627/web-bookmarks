@@ -90,16 +90,17 @@ export default function Bookmarks() {
             <Sidebar/>
 
             <div id="dashboard-body">
-            {error && <div className="error-box">{error}</div> }
+                {error && <div className="error-box">{error}</div> }
                 <div id="dashboard-body-nav">
                     <form>
                         <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </form>
 
                     <button onClick={() => setNewBookmmark(true)}>New Bookmark <i style={{}} className="fa-solid fa-circle-plus"></i> </button>
+                    
                 </div>
 
-                <FilterBox filter={filter} setFilter={setFilter}/>
+                <FilterBox filter={filter} setFilter={setFilter} sectionTitle="All Bookmarks"/>
                 
 
                 <div id="media-type-selector">
@@ -117,7 +118,7 @@ export default function Bookmarks() {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()} ></Card>
                         ))
                     }
                 </div>

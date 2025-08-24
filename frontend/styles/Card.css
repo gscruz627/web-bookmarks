@@ -60,14 +60,35 @@
     border-radius:0 0 5px 5px;
     font-weight:bolder;
 }
-.button-container-two{
+.restore-button:hover{
+    background-color: #266fd5;
+    color:#FFF
+}
+.edit-button{
+    width:100%;
+    outline:none;
+    color:#f2a42f;
+    padding:0.5rem;
+    border:1px solid #d3d7fa;
+    border-top:none; border-left:none;
+    background-color: #FFF;
+    border-radius: 0 0 5px 0;
+}
+.edit-button:hover{
+    background-color: #f2a42f;
+    color:#FFF;
+}
+.button-container-three{
     width:100%;
     display:grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 40% 40% 20%;
 }
-.button-container-two .archive-button{
+.button-container-three .archive-button{
     border-bottom-right-radius:0;
 }
-.button-container-two .restore-button{
-    border-bottom-left-radius:0;
+.button-container-three .restore-button{
+    border-radius:0;
+}
+.button-container-three .edit-button{
+    border-radius
 }

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddFolder from "../components/AddFolder"
+import AddTeam from "../components/AddTeam"
 import checkAuth from "../functions/auth";
+import logout from "../functions/logout"
 
 type Props = {}
 
@@ -12,8 +14,10 @@ export default function Sidebar({}: Props) {
     const token = localStorage.getItem("access-token");
     const [showNav, setShowNav] = useState<boolean>(true);
     const [folders, setFolders] = useState<Array<any>>([]);
+    const [teams,  setTeams] = useState<Array<any>>([]);
     const username = localStorage.getItem("username");
     const [addFolder, setAddFolder] = useState<boolean>(false);
+    const [addTeam, setAddTeam] = useState<boolean>(false);
     const navigate = useNavigate();
 
     async function loadFolders(){
@@ -32,6 +36,22 @@ export default function Sidebar({}: Props) {
             alert(error.message)
         }
     }
+
+    async function loadTeams(){
+        try{
+            await checkAuth(navigate);
+            const request = await fetch(`${SERVER_URL}/api/teams?userId=${userId}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                }
+            });
+            const teamsResponse = await request.json();
+            setTeams(teamsResponse);
+        } catch(error: any){
+            alert(error.message);
+        }
+    }
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth > 768) {
@@ -45,10 +65,12 @@ export default function Sidebar({}: Props) {
 
     useEffect(() => {
         loadFolders();
+        loadTeams();
     }, [])
     return (
         <>
         {addFolder && <AddFolder onAdd={setFolders} onExit={() => setAddFolder(false)}/>}
+        {addTeam && <AddTeam onAdd={setTeams} onExit={() => setAddTeam(false)}/>}
         <nav>
             <Link to="/"><h3>Web Bookmarks </h3></Link>
             <i onClick={() => setShowNav(prev => !prev)} className="fa-solid fa-bars"></i>
@@ -67,7 +89,7 @@ export default function Sidebar({}: Props) {
                 <ul>
                     {folders.length > 0 ?
                      folders.map( (folder) => (
-                        <li><i className="fa-solid fa-folder"></i>{folder.title}</li>
+                        <li onClick={() => navigate(`/folders/${folder.id}`)}><i className="fa-solid fa-folder"></i>{folder.title}</li>
                     )) 
                     :
                         <div className="sidebar-message">
@@ -78,7 +100,20 @@ export default function Sidebar({}: Props) {
                 </ul>
                 <hr/>
                 <ul>
-                    <li><i className="fa-solid fa-right-from-bracket"></i>Log Out</li>
+                    {teams.length > 0 ?
+                        teams.map( (team) => (
+                            <li onClick={() => navigate(`/teams/${team.id}`)}><i className="fa-solid fa-people-group"></i>{team.title}</li>
+                        )) 
+                    :
+                        <div className="sidebar-message">
+                            <p>Your teams will appear here!</p>
+                        </div>
+                    }
+                    <button onClick={() => setAddTeam(true)} className="blue-inverted-button" style={{margin: "1rem 0", width: "100%"}}>New Team <i className="fa-solid fa-circle-plus"></i></button>
+                </ul>
+                <ul>
+                    <li onClick={() => navigate("/settings")}><i className="fa-solid fa-gear"></i>Account</li>
+                    <li onClick={() => logout(navigate)}><i className="fa-solid fa-right-from-bracket"></i>Log Out</li>
                     <li><i className="fa-solid fa-moon"></i>Dark Theme</li>
                 </ul>
             </div>

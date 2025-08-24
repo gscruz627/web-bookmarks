@@ -49,6 +49,7 @@ export default function useSortedBookmarks(
     }
     if(mediaFilter !== MediaType.None){
         setSortedBookmarks(sorted.filter(b => b.mediaType === mediaFilter))
+        return;
     }
     setSortedBookmarks(sorted);
   }, [bookmarks, filter, search, mediaFilter]);
