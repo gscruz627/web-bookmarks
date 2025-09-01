@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
 import Card from "../components/Card";
 import NewBookmark from "../components/NewBookmark"
-import { MediaType, DashboardSelection } from "../enums";
-import { Link, useNavigate } from "react-router-dom";
+import { MediaType } from "../enums";
+import {useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar"
 import "../styles/Bookmarks.css";
 import checkAuth from "../functions/auth";
@@ -14,7 +14,7 @@ export default function Bookmarks() {
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
-    const [newBookmark, setNewBookmmark] = useState<boolean>(false);
+    const [newBookmark, setNewBookmark] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
@@ -28,9 +28,7 @@ export default function Bookmarks() {
     async function loadBookmarks(){
         try{
             setLoading(true);
-            console.log(localStorage.getItem("refresh-token"))
             await checkAuth(navigate);
-            console.log(localStorage.getItem("refresh-token"))
             const userId = localStorage.getItem("userId");
             const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${userId}&archived=false`, {
                 method: "GET",
@@ -39,7 +37,9 @@ export default function Bookmarks() {
                 }
             });
             if(!request.ok){
-                setError("Something wrong happened while getting your bookmarks");
+                const message = await request.json();
+                setError(message);
+                return;
             }
             const bookmarksResponse = await request.json();
             setAllBookmarks(bookmarksResponse);
@@ -51,9 +51,10 @@ export default function Bookmarks() {
         }
     }
 
-    async function archive(id:number){
+    async function archive(id:string){
+        setLoading(true);
         try{
-            console.log("HA")
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
                 method: "PATCH",
                 headers: {
@@ -66,16 +67,18 @@ export default function Bookmarks() {
                 })
             });
             if(!request.ok){
-                console.log("somethiing went wrong");
-                setError("Something went wrong while archiving, please try again.");
+                const message = await request.json();
+                setError(message);
                 return;
             }
             await loadBookmarks();
         } catch(error: any){
-            console.log("something weent wrong");
             setError(error.Message)
+        } finally{
+            setLoading(false);
         }
     }
+
     useEffect( () => {
         loadBookmarks();
     }, [])
@@ -84,7 +87,7 @@ export default function Bookmarks() {
         <>
         {loading && <Loading/>}
         {newBookmark &&
-            <NewBookmark onExit={() =>setNewBookmmark(false)} onAdd={setAllBookmarks}/>
+            <NewBookmark onExit={() =>setNewBookmark(false)} onAdd={setAllBookmarks}/>
         }
         <div id="dashboard">
             <Sidebar/>
@@ -96,12 +99,11 @@ export default function Bookmarks() {
                         <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </form>
 
-                    <button onClick={() => setNewBookmmark(true)}>New Bookmark <i style={{}} className="fa-solid fa-circle-plus"></i> </button>
+                    <button onClick={() => setNewBookmark(true)}>New Bookmark <i style={{}} className="fa-solid fa-circle-plus"></i> </button>
                     
                 </div>
 
-                <FilterBox filter={filter} setFilter={setFilter} sectionTitle="All Bookmarks"/>
-                
+                <FilterBox filter={filter} setFilter={setFilter} sectionTitle="All Bookmarks"/>    
 
                 <div id="media-type-selector">
                     <span className={mediaFilter === MediaType.Video ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Video ? MediaType.None : MediaType.Video)}><i className="fa-solid fa-file-video"></i> Video</span>
@@ -118,7 +120,7 @@ export default function Bookmarks() {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()} ></Card>
+                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={async() => await loadBookmarks()} ></Card>
                         ))
                     }
                 </div>

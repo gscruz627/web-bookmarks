@@ -24,7 +24,7 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<List<Team>>> Get([FromQuery] Guid? userId)
         {
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            IQueryable<Team> teamsQueryable = _dbcontext.Teams.Include(t => t.Bookmarks).Include(t => t.Members).AsQueryable();
+            IQueryable<Team> teamsQueryable = _dbcontext.Teams.Include(t => t.Members).AsQueryable();
 
             if(userId is not null)
             {
@@ -36,7 +36,7 @@ namespace WebBookmarks.Controllers
                 if(user is null) { return BadRequest("Non-Existant User"); }
                 teamsQueryable = teamsQueryable.Where(t => t.Members.Contains(user));
             }
-            List<Team> teams = await teamsQueryable.ToListAsync();
+            List<TeamInfoDTO> teams = await teamsQueryable.Select(t => new TeamInfoDTO { Id = t.Id, Title = t.Title }).ToListAsync();
             return Ok(teams);
         }
 
@@ -134,9 +134,10 @@ namespace WebBookmarks.Controllers
             if (team.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
 
             team.Title = teamDTO.Title;
+            TeamInfoDTO teamInfo = new() { Id = team.Id, Title = team.Title };
             await _dbcontext.SaveChangesAsync();
 
-            return Ok(team);
+            return Ok(teamInfo);
         }
 
         [HttpDelete("{id:guid}")]

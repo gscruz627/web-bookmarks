@@ -11,7 +11,6 @@ namespace WebBookmarks.Models
         public string BaseSite { get; set; }
         public string MediaType { get; set; }
         public bool Archived { get; set; }
-        public bool Private { get; set; } = false;
         public DateTime DateAdded { get; set; } = DateTime.MinValue;
 
         [JsonIgnore]

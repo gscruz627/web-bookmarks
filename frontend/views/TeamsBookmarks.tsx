@@ -132,14 +132,16 @@ export default function TeamsBookmarks({}: Props) {
                 })
             });
             if(!request.ok){
-                setError("Something went wrong while removing this user, code: " + request.status);
+                const message = await request.json();
+                setError(message);
+                return;
             }
             if(userId === localStorage.getItem("userId")){
                 navigate("/dashboard")
             }
             loadBookmarks();
         } catch(error: any){
-            setError("Server error: " + error.message);
+            setError(error.message);
         }
     }
 
@@ -244,7 +246,7 @@ export default function TeamsBookmarks({}: Props) {
                             </div>
                         :
                             sortedBookmarks.map((bookmark) => (
-                                <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                                <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()} teamId={id}></Card>
                             ))
                         }
                     </div>

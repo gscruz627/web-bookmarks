@@ -4,13 +4,15 @@ import "../styles/NewBookmark.css"
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 type Props = {
+  id?: string
   onExit: () => void;
   onAdd: (prev:any) => void;
   cardInfo: any;
+  dek?: CryptoKey
 }
 
-export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
-
+export default function EditBookmark({id,cardInfo,onExit, onAdd, dek}: Props) {
+  console.log(id);
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
   const token = localStorage.getItem("access-token");
   const titleRef = useRef<HTMLInputElement>(null);
@@ -22,6 +24,26 @@ export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+const toB64 = (buf: ArrayBuffer) =>
+  btoa(String.fromCharCode(...new Uint8Array(buf)));
+  async function encryptBookmark(
+  dek: CryptoKey,
+  data: any
+  ) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));          // 12-byte GCM IV
+    const plaintext = new TextEncoder().encode(JSON.stringify(data));
+
+    const ciphertext = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv },                                       // (optionally add: , additionalData: aad )
+      dek,
+      plaintext
+    );
+
+    return {
+      cipher: toB64(ciphertext),
+      iv: toB64(iv.buffer),
+    };
+  }
   function normalizeUrl(input: any) {
     if (!/^https?:\/\//i.test(input)) {
       input = "https://" + input;
@@ -39,7 +61,7 @@ export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
       linkRef.current!.value = normalizeUrl(linkRef.current!.value) || linkRef.current!.value;
       const request = await fetch(linkRef.current!.value);
       if(!request.ok){
-        setError("Something went wrong with the request.")
+       setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
       }
       const html = await request.text();
       const parser = new DOMParser();
@@ -64,7 +86,7 @@ export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
       iconRef.current!.src = icoUrl.toString() || "";
       setError("");
     } catch(error: any){
-      setError(`Error while making a request to that link: ${error.message}`)
+      setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
     } finally{
       setLoading(false);
     }
@@ -78,15 +100,24 @@ export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
       if(checked){
         const token = localStorage.getItem("access-token");
       }
-      const request = await fetch(`${SERVER_URL}/api/bookmarks/${cardInfo.id}`, {
-          method: "PATCH",
+      console.log(cardInfo);
+      let route = `${SERVER_URL}/api/`
+      route += dek ? `private/${id}` : `bookmarks/${cardInfo.id ?? id}` 
+      const request = await fetch(route, {
+          method: dek ? "PUT" : "PATCH",
           headers: {
             "Content-Type" : "application/json",
             "Accept" : "application/json",
             "Authorization" : `Bearer ${token}`
           },
-          body: JSON.stringify({
-            "iconUrl": iconRef.current!.src,
+          body: dek ? JSON.stringify(await encryptBookmark(dek,{
+            "iconUrl": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
+            "title": titleRef.current?.value,
+            "link" : linkRef.current?.value,
+            "baseSite": websiteRef.current?.value,
+            "mediaType": mediaSelectionRef.current?.value,
+          })) : JSON.stringify({
+            "iconUrl": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
             "title": titleRef.current?.value,
             "link" : linkRef.current?.value,
             "baseSite": websiteRef.current?.value,
@@ -95,7 +126,8 @@ export default function EditBookmark({cardInfo,onExit, onAdd}: Props) {
         })
         setError("");
         if(!request.ok){
-          setError("Something went wrong with the request, status: " + request.status);
+          const message = await request.json();
+          setError(message);
           return;
         }
         const bookmark = await request.json();

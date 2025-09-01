@@ -29,7 +29,7 @@ namespace WebBookmarks.Controllers
         {
             User? user = await _dbcontext.Users.FindAsync(id);
             if (user is null) { return NotFound(); }
-            UserInfoDTO userInfoDTO = new(){ Username = user.Username};
+            UserInfoDTO userInfoDTO = new(){ UserId = user.Id, Username = user.Username};
             return Ok(userInfoDTO);
         }
 
@@ -37,7 +37,7 @@ namespace WebBookmarks.Controllers
         public async Task<IActionResult> Register(NewUserDTO userDTO)
         {
             User? existingUser = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);   
-            if(existingUser is not null) { return Conflict("User already exists"); }
+            if(existingUser is not null) { return Conflict("User with username already exists, choose a different username"); }
 
             PasswordHasher<User> passwordHasher = new();
             string hashedPassword = passwordHasher.HashPassword(null, userDTO.Password);
@@ -53,21 +53,23 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<TokensDTO>> Login(NewUserDTO userDTO)
         {
             User? user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
-            if (user is null) { return Unauthorized("Incorrect Username or Password"); }
+            if (user is null) {
+                return Unauthorized("Incorrect Username or Password");
+            }
 
             PasswordHasher<User> passwordHasher = new();
             PasswordVerificationResult authenticated = passwordHasher.VerifyHashedPassword(null, user.Password, userDTO.Password);
 
             if (authenticated != PasswordVerificationResult.Success)
             {
-                return Unauthorized("Incorrect Username or Passwoord");
+                return Unauthorized("Incorrect Username or Password");
             }
 
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
-            };
+                new Claim(ClaimTypes.Name, user.Username),
+            }; ;
             string accessToken = GetAccessToken(user);
             string refreshToken = GetRefreshToken();
 
@@ -115,7 +117,7 @@ namespace WebBookmarks.Controllers
 
         [HttpPatch("{id}")]
         [Authorize]
-        public async Task<ActionResult> Patch(Guid id, [FromBody] UserPatchDTO userDTO)
+        public async Task<ActionResult<UserInfoDTO>> Patch(Guid id, [FromBody] UserPatchDTO userDTO)
         {
             Guid loggedIdUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             User? user = await _dbcontext.Users.FindAsync(id);
@@ -128,9 +130,14 @@ namespace WebBookmarks.Controllers
                 return Conflict("Another user already has this username");
             }
             user.Username = userDTO.Username;
+            UserInfoDTO userInfo = new()
+            {
+                Username = user.Username,
+                UserId = user.Id
+            };
             await _dbcontext.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok(userInfo);
         }
 
         [HttpDelete("{id:guid}")]

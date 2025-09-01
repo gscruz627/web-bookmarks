@@ -35,14 +35,15 @@ export default function Settings({}: Props) {
           username: usernameRef.current?.value || localStorage.getItem("username")
         })
       });
-      if(!request.ok){
-        setError("Something wrong happened while changing your name " + request.status);
-      }
       const userResponse = await request.json();
+      if(!request.ok){
+        setError(userResponse);
+        return;
+      };
       localStorage.setItem("username", userResponse.username);
-      //window.location.reload();
+      window.location.reload();
     } catch(error: any){
-      setError("Server error: " + error.message);
+      setError(error.message);
     } finally{
       setLoading(false);
     }
@@ -58,7 +59,9 @@ export default function Settings({}: Props) {
         }
       })
       if(!request.ok){
-        setError("Something went wrong while deleting your account, status: " + request.status);
+        const message = await request.json();
+        setError(message);
+      return;
       }
       logout(navigate)
     } catch(error: any){

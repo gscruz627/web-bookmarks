@@ -43,7 +43,8 @@ export default function FilterBox({onExit, filter, setFilter, sectionTitle, fold
                 })
             });
             if(!request.ok){
-                setError("Something went wrong while changing the name of this bookmark: " + request.status)
+                const message = await request.json();
+                setError(message);
             }
             setEditing(false);
             onExit();

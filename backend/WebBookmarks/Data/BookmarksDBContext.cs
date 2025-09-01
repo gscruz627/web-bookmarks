@@ -13,6 +13,8 @@ namespace WebBookmarks.Data
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<PrivateVault> PrivateVaults { get; set; }
+        public DbSet<PrivateBookmark> PrivateBookmarks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

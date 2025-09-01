@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import Loading from "./Loading";
+import checkAuth from "../functions/auth";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     onExit: () => void,
@@ -13,12 +15,15 @@ export default function AddFolder({onExit, onAdd}: Props) {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
+    const navigate = useNavigate();
+
     const titleRef = useRef<HTMLInputElement>(null);
     async function handleSubmit(e: React.FormEvent){
         e.preventDefault();
 
         setLoading(true);
         try{
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/folders`, {
                 method: "POST",
                 headers: {
@@ -31,7 +36,9 @@ export default function AddFolder({onExit, onAdd}: Props) {
                 })
             });
             if(!request.ok){
-                setError("Something went wrong when adding a new folder, code: " + request.status);
+                const message = await request.json();
+                setError(message);
+                return;
             }
             const folder = await request.json();
             onAdd((list:any) => [...list, folder]);

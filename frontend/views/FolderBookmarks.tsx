@@ -70,9 +70,10 @@ export default function FolderBookmarks({}: Props) {
         }
     }
 
-        async function archive(id:number){
+    async function archive(id:number){
+        setLoading(true);
         try{
-            console.log("HA")
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
                 method: "PATCH",
                 headers: {
@@ -93,6 +94,8 @@ export default function FolderBookmarks({}: Props) {
         } catch(error: any){
             console.log("something weent wrong");
             setError(error.Message)
+        } finally{
+            setLoading(false);
         }
     }
 
@@ -106,11 +109,13 @@ export default function FolderBookmarks({}: Props) {
                 }
             });
             if(!request.ok){
-                setError("Something went wrong with deleting this folder: " + request.statusText);
+               const message = await request.json();
+               setError(message);
+                return;
             }
             navigate("/dashboard");
         } catch(error:any){
-            setError("Server error: " + error.message)
+            setError(error.message)
         } finally{
             setLoading(false);
         }
@@ -158,7 +163,7 @@ export default function FolderBookmarks({}: Props) {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                            <Card folderId={id} bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()}></Card>
                         ))
                     }
                 </div>

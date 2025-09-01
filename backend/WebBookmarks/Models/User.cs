@@ -12,6 +12,8 @@ namespace WebBookmarks.Models
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryDate { get; set; }
 
+        public Guid? VaultID { get; set; }
+
         [JsonIgnore]
         public List<Bookmark> Bookmarks { get; set; } = [];
 

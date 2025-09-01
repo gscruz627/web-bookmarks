@@ -83,9 +83,6 @@ namespace WebBookmarks.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Private")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("TeamID")
                         .HasColumnType("uniqueidentifier");
 
@@ -120,6 +117,68 @@ namespace WebBookmarks.Migrations
                     b.HasIndex("OwnerID");
 
                     b.ToTable("Folders");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.PrivateBookmark", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Cipher")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Iv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("PrivateBookmarks");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.PrivateVault", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("KdfHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KdfIterations")
+                        .HasColumnType("int");
+
+                    b.Property<string>("KdfSalt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OwnerID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("WrapIV")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WrappedDEK")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("PrivateVaults");
                 });
 
             modelBuilder.Entity("WebBookmarks.Models.Team", b =>
@@ -164,6 +223,9 @@ namespace WebBookmarks.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("VaultID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -216,6 +278,28 @@ namespace WebBookmarks.Migrations
                 });
 
             modelBuilder.Entity("WebBookmarks.Models.Folder", b =>
+                {
+                    b.HasOne("WebBookmarks.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.PrivateBookmark", b =>
+                {
+                    b.HasOne("WebBookmarks.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("WebBookmarks.Models.PrivateVault", b =>
                 {
                     b.HasOne("WebBookmarks.Models.User", "Owner")
                         .WithMany()

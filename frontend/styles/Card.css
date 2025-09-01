@@ -89,6 +89,14 @@
 .button-container-three .restore-button{
     border-radius:0;
 }
-.button-container-three .edit-button{
-    border-radius
+.button-container-two{
+    width:100%;
+    display:grid;
+    grid-template-columns: 50% 50%;
+}
+.button-container-two .archive-button{
+    border-bottom-right-radius:0;
+}
+.button-container-two .restore-button{
+    border-bottom-left-radius:0;
 }

@@ -31,9 +31,7 @@ export default function ArchivedBookmarks({}: Props) {
         async function loadBookmarks(){
             try{
                 setLoading(true);
-                console.log(localStorage.getItem("refresh-token"))
                 await checkAuth(navigate);
-                console.log(localStorage.getItem("refresh-token"))
                 const userId = localStorage.getItem("userId");
                 const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${userId}&archived=true`, {
                     method: "GET",
@@ -42,7 +40,9 @@ export default function ArchivedBookmarks({}: Props) {
                     }
                 });
                 if(!request.ok){
-                    setError("Something wrong happened while getting your bookmarks");
+                    const message = await request.json();
+                    setError(message);
+                    return;
                 }
                 const bookmarksResponse = await request.json();
                 setAllBookmarks(bookmarksResponse);
@@ -86,7 +86,7 @@ export default function ArchivedBookmarks({}: Props) {
                     </div>
                 :
                     sortedBookmarks.map((bookmark:any) => (
-                        <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} ></Card>
+                        <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={async() => await loadBookmarks()}></Card>
                     ))
                 }
                     </div>

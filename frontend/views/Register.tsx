@@ -17,14 +17,17 @@ export default function Register({}: Props) {
     const [loading, setLoading] = useState<boolean>(false);
 
     async function handleSubmit(e: React.FormEvent){
-        
         e.preventDefault();
+        if(password.length < 8 || (password !== passwordCheck)){
+            return;
+        }
         setLoading(true);
         try{
             const request: Response = await fetch(`${SERVER_URL}/api/users`, {
                 method: "POST",
                 headers: {
-                    "Content-Type" : "application/json"
+                    "Content-Type" : "application/json",
+                    "Accept" : "application/json"
                 },
                 body: JSON.stringify({
                     username: usernameRef.current?.value,
@@ -32,7 +35,12 @@ export default function Register({}: Props) {
                 })
             });
             if(!request.ok){
-                setError("Something went wrong with registering your account. Reload & try again.");
+                if(request.status === 409){
+                    const failure = await request.json();
+                    setError(failure);
+                } else {
+                    setError("Something went wrong with registering your account. Reload & try again.");
+                }
                 return;
             }
             navigate("/login");

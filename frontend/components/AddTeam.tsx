@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
+import checkAuth from "../functions/auth";
 
 type Props = {
     onExit: () => void,
@@ -12,6 +14,8 @@ export default function AddTeam({onExit, onAdd}: Props) {
     const token = localStorage.getItem("access-token");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    
+    const navigate = useNavigate();
 
     const titleRef = useRef<HTMLInputElement>(null);
     async function handleSubmit(e: React.FormEvent){
@@ -19,6 +23,7 @@ export default function AddTeam({onExit, onAdd}: Props) {
 
         setLoading(true);
         try{
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/teams`, {
                 method: "POST",
                 headers: {
@@ -31,7 +36,9 @@ export default function AddTeam({onExit, onAdd}: Props) {
                 })
             });
             if(!request.ok){
-                setError("Something went wrong when adding a new folder, code: " + request.status);
+                const message = await request.json();
+                setError(message);
+                return;
             }
             const folder = await request.json();
             onAdd((list:any) => [...list, folder]);

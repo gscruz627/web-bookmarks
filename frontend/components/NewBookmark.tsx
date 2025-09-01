@@ -6,10 +6,11 @@ import Loading from "./Loading";
 type Props = {
   onExit: () => void;
   onAdd: (prev:any) => void;
-  teamId?: string
+  teamId?: string;
+  dek?: CryptoKey
 }
 
-export default function NewBookmark({onExit, onAdd, teamId}: Props) {
+export default function NewBookmark({onExit, onAdd, teamId, dek}: Props) {
 
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
   const token = localStorage.getItem("access-token");
@@ -39,7 +40,7 @@ export default function NewBookmark({onExit, onAdd, teamId}: Props) {
       linkRef.current!.value = normalizeUrl(linkRef.current!.value) || linkRef.current!.value;
       const request = await fetch(linkRef.current!.value);
       if(!request.ok){
-        setError("Something went wrong with the request.")
+        setError("A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.")
       }
       const html = await request.text();
       const parser = new DOMParser();
@@ -64,12 +65,56 @@ export default function NewBookmark({onExit, onAdd, teamId}: Props) {
       iconRef.current!.src = icoUrl.toString() || "";
       setError("");
     } catch(error: any){
-      setError(`Error while making a request to that link: ${error.message}`)
+      setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
     } finally{
       setLoading(false);
     }
   }
 
+  const toB64 = (buf: ArrayBuffer) =>
+  btoa(String.fromCharCode(...new Uint8Array(buf)));
+
+  function fromB64(b64: string): ArrayBuffer {
+    const bin = atob(b64);
+    const buf = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    return buf.buffer;
+  }
+
+  async function decryptBookmark(
+  dek: CryptoKey,
+  encrypted: { ciphertext: string; iv: string }
+  ) {
+    const ciphertext = fromB64(encrypted.ciphertext);
+    const iv = new Uint8Array(fromB64(encrypted.iv));
+
+    const plaintextBuf = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      dek,
+      ciphertext
+    );
+
+    return JSON.parse(new TextDecoder().decode(plaintextBuf));
+  }
+
+  async function encryptBookmark(
+  dek: CryptoKey,
+  data: any
+  ) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));          // 12-byte GCM IV
+    const plaintext = new TextEncoder().encode(JSON.stringify(data));
+
+    const ciphertext = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv },                                       // (optionally add: , additionalData: aad )
+      dek,
+      plaintext
+    );
+
+    return {
+      cipher: toB64(ciphertext),
+      iv: toB64(iv.buffer),
+    };
+  }
   async function handleSubmit(e: React.FormEvent){
     e.preventDefault();
     try{
@@ -78,29 +123,40 @@ export default function NewBookmark({onExit, onAdd, teamId}: Props) {
       if(checked){
         const token = localStorage.getItem("access-token");
       }
-      const request = await fetch(`${SERVER_URL}/api/bookmarks`, {
+      let route = SERVER_URL + "/api/";
+      route += dek ? "private" : "bookmarks";
+      const requestBody = dek ? await encryptBookmark(dek, {
+        "iconUrl": iconRef.current!.src,
+        "title": titleRef.current?.value,
+        "link" : linkRef.current?.value,
+        "baseSite": websiteRef.current?.value,
+        "mediaType": mediaSelectionRef.current?.value,
+        "teamId" : teamId ?? null
+      }) : {
+        "iconUrl": iconRef.current!.src,
+        "title": titleRef.current?.value,
+        "link" : linkRef.current?.value,
+        "baseSite": websiteRef.current?.value,
+        "mediaType": mediaSelectionRef.current?.value,
+        "teamId" : teamId ?? null
+      }
+      const request = await fetch(route, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json",
             "Accept" : "application/json",
             "Authorization" : `Bearer ${token}`
           },
-          body: JSON.stringify({
-            "iconUrl": iconRef.current!.src,
-            "title": titleRef.current?.value,
-            "link" : linkRef.current?.value,
-            "baseSite": websiteRef.current?.value,
-            "mediaType": mediaSelectionRef.current?.value,
-            "teamId" : teamId ?? null
-          })
+          body: JSON.stringify(requestBody)
         })
-        setError("");
+        const bookmarkInfo = await request.json();
         if(!request.ok){
-          setError("Something went wrong with the request, status: " + request.status);
+          setError(bookmarkInfo);
           return;
         }
-        const bookmark = await request.json();
+        const bookmark = dek ? await decryptBookmark(dek, {ciphertext: bookmarkInfo.cipher, iv: bookmarkInfo.iv}) : bookmarkInfo
         onAdd((prev: any) => [...prev, bookmark]);
+        setError("");
         onExit();
       }
       catch(error: any){
