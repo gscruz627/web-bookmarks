@@ -2,16 +2,16 @@ import { useRef, useState } from "react";
 import Loading from "./Loading";
 import checkAuth from "../functions/auth";
 import { useNavigate } from "react-router-dom";
+import state from "../store";
 
 type Props = {
-    onExit: () => void,
-    onAdd: (prev: any) => void
+    onExit: () => void
 }
 
-export default function AddFolder({onExit, onAdd}: Props) {
+export default function AddFolder({onExit}: Props) {
 
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-    const token = localStorage.getItem("access-token");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
@@ -29,7 +29,7 @@ export default function AddFolder({onExit, onAdd}: Props) {
                 headers: {
                     "Content-Type" : "application/json",
                     "Accept" : "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${state.token}`
                 },
                 body: JSON.stringify({
                     title: titleRef.current?.value,
@@ -41,7 +41,7 @@ export default function AddFolder({onExit, onAdd}: Props) {
                 return;
             }
             const folder = await request.json();
-            onAdd((list:any) => [...list, folder]);
+            state.folders.push(folder);
             onExit();
         } catch(errorMsg:any){
             setError(errorMsg.message);

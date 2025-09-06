@@ -1,4 +1,4 @@
-import { DashboardSelection, MediaType } from "../enums"
+import { MediaType } from "../enums"
 import { useEffect, useRef, useState } from "react";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import Loading from "../components/Loading";
@@ -8,10 +8,13 @@ import { useNavigate } from "react-router-dom";
 import NewBookmark from "../components/NewBookmark";
 import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
+import { useSnapshot } from "valtio";
+import state from "../store";
 
 type Props = {}
 
 export default function PrivateBookmarks({}: Props) {
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const navigate = useNavigate();
     const [hasUnlocked, setHasUnlocked] = useState<boolean>(false);
@@ -19,16 +22,14 @@ export default function PrivateBookmarks({}: Props) {
     const [newBookmark, setNewBookmark] = useState<boolean>(false);
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
-    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const vaultPwdRef = useRef<HTMLInputElement>(null);
     const [vaultDek, setVaultDek] = useState<CryptoKey|undefined>(undefined);
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
-    const [sectionTitle ,setSectionTitle] = useState<string>("");
-    const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+
+    const snap = useSnapshot(state);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
     
     async function loadVault(){
         await checkAuth(navigate);
@@ -37,7 +38,7 @@ export default function PrivateBookmarks({}: Props) {
             const request = await fetch(`${SERVER_URL}/api/vaults`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`,
+                    "Authorization": `Bearer ${state.token}`,
                     "Content-Type" : "application/json"
                 }
             });
@@ -89,7 +90,7 @@ export default function PrivateBookmarks({}: Props) {
             const request = await fetch(`${SERVER_URL}/api/private/`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             if(!request.ok){
@@ -104,8 +105,7 @@ export default function PrivateBookmarks({}: Props) {
                 decrypted.id = bookmarkEncrypted.id
                 bookmarksDecrypted.push(decrypted);
             }
-            setAllBookmarks(bookmarksDecrypted);
-            setBookmarks(bookmarksDecrypted);
+            state.bookmarks = bookmarksDecrypted;
         } catch(errorMsg:any){
             setError(errorMsg.message);
         } finally{
@@ -175,7 +175,8 @@ export default function PrivateBookmarks({}: Props) {
             loadBookmarks();
         }
     }, [vaultDek])
-    function base64ToArrayBuffer(base64) {
+    
+    function base64ToArrayBuffer(base64: string) {
         const binary = atob(base64);
         const bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) {
@@ -183,7 +184,7 @@ export default function PrivateBookmarks({}: Props) {
     }
     return bytes.buffer;
     }
-    function bufToBase64(buf) {
+    function bufToBase64(buf: ArrayBuffer) {
         return btoa(String.fromCharCode(...new Uint8Array(buf)));
     }
     
@@ -238,7 +239,7 @@ export default function PrivateBookmarks({}: Props) {
             const request = await fetch(`${SERVER_URL}/api/vaults`, {
                 method: "POST",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`,
+                    "Authorization" : `Bearer ${state.token}`,
                     "Content-Type" : "application/json",
                 },
                 body: JSON.stringify({
@@ -267,7 +268,7 @@ export default function PrivateBookmarks({}: Props) {
         <>
         {loading && <Loading/>}
         {newBookmark &&
-            <NewBookmark onExit={() =>setNewBookmark(false)} onAdd={setAllBookmarks} dek={vaultDek}/>
+            <NewBookmark onExit={() =>setNewBookmark(false)} dek={vaultDek}/>
         }
         <div id="dashboard">
             <Sidebar/>
@@ -303,7 +304,7 @@ export default function PrivateBookmarks({}: Props) {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card id={bookmark.id} dek={vaultDek} bookmark={bookmark} privateBookmark={true} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL ?? bookmark.iconUrl} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()} ></Card>
+                            <Card key={bookmark.id} dek={vaultDek} bookmark={bookmark}></Card>
                         ))
                     }
                 </div>

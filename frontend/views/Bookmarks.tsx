@@ -9,31 +9,32 @@ import checkAuth from "../functions/auth";
 import Loading from "../components/Loading";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import FilterBox from "../components/FilterBox"
+import state from "../store";
+import { useSnapshot } from "valtio";
 export default function Bookmarks() {
 
+    //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
+    const snap = useSnapshot(state);
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [newBookmark, setNewBookmark] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
     const navigate = useNavigate();
 
-    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
 
     async function loadBookmarks(){
         try{
             setLoading(true);
             await checkAuth(navigate);
-            const userId = localStorage.getItem("userId");
-            const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${userId}&archived=false`, {
+            const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${snap.user?.userId}&archived=false`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             if(!request.ok){
@@ -42,8 +43,7 @@ export default function Bookmarks() {
                 return;
             }
             const bookmarksResponse = await request.json();
-            setAllBookmarks(bookmarksResponse);
-            setBookmarks(bookmarksResponse);
+            state.bookmarks = bookmarksResponse
         } catch(errorMsg:any){
             setError(errorMsg.message);
         } finally{
@@ -58,7 +58,7 @@ export default function Bookmarks() {
             const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
                 method: "PATCH",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem('access-token')}`,
+                    "Authorization" : `Bearer ${state.token}`,
                     "Content-Type" : "Application/json",
                     "Accept": "application/json",
                 },
@@ -71,7 +71,7 @@ export default function Bookmarks() {
                 setError(message);
                 return;
             }
-            await loadBookmarks();
+            state.bookmarks = state.bookmarks.filter(b => b.id !== id)
         } catch(error: any){
             setError(error.Message)
         } finally{
@@ -87,7 +87,7 @@ export default function Bookmarks() {
         <>
         {loading && <Loading/>}
         {newBookmark &&
-            <NewBookmark onExit={() =>setNewBookmark(false)} onAdd={setAllBookmarks}/>
+            <NewBookmark onExit={() =>setNewBookmark(false)}/>
         }
         <div id="dashboard">
             <Sidebar/>
@@ -120,7 +120,7 @@ export default function Bookmarks() {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={async() => await loadBookmarks()} ></Card>
+                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)}></Card>
                         ))
                     }
                 </div>

@@ -9,34 +9,35 @@ import Card from "../components/Card";
 
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import checkAuth from "../functions/auth";
+import state from "../store";
+import { useSnapshot } from "valtio";
 
 type Props = {}
 
 export default function ArchivedBookmarks({}: Props) {
 
+    //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const snap = useSnapshot(state);
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
-    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
 
     const navigate = useNavigate();
 
-    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
 
         async function loadBookmarks(){
             try{
                 setLoading(true);
                 await checkAuth(navigate);
-                const userId = localStorage.getItem("userId");
-                const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${userId}&archived=true`, {
+                const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${state.user?.userId}&archived=true`, {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                        "Authorization": `Bearer ${state.token}`
                     }
                 });
                 if(!request.ok){
@@ -45,14 +46,41 @@ export default function ArchivedBookmarks({}: Props) {
                     return;
                 }
                 const bookmarksResponse = await request.json();
-                setAllBookmarks(bookmarksResponse);
-                setBookmarks(bookmarksResponse);
+                state.bookmarks = bookmarksResponse;
             } catch(errorMsg:any){
                 setError(errorMsg.message);
             } finally{
                 setLoading(false);
             }
         }
+
+    async function restore(id:string){
+        setLoading(true);
+        try{
+            await checkAuth(navigate);
+            const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization" : `Bearer ${state.token}`,
+                    "Content-Type" : "Application/json",
+                    "Accept": "application/json",
+                },
+                body: JSON.stringify({
+                    archived: false
+                })
+            });
+            if(!request.ok){
+                const message = await request.json();
+                setError(message);
+                return;
+            }
+            state.bookmarks = state.bookmarks.filter(b => b.id !== id)
+        } catch(error: any){
+            setError(error.Message)
+        } finally{
+            setLoading(false)
+        }
+    }
         useEffect( () => {
             loadBookmarks();
         }, [])
@@ -86,7 +114,7 @@ export default function ArchivedBookmarks({}: Props) {
                     </div>
                 :
                     sortedBookmarks.map((bookmark:any) => (
-                        <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={async() => await loadBookmarks()}></Card>
+                        <Card bookmark={bookmark} restore={() => restore(bookmark.id)}></Card>
                     ))
                 }
                     </div>

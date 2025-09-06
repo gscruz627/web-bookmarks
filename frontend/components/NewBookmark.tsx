@@ -3,17 +3,17 @@ import checkAuth from "../functions/auth";
 import "../styles/NewBookmark.css"
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import state from "../store";
 type Props = {
   onExit: () => void;
-  onAdd: (prev:any) => void;
   teamId?: string;
   dek?: CryptoKey
 }
 
-export default function NewBookmark({onExit, onAdd, teamId, dek}: Props) {
+export default function NewBookmark({onExit, teamId, dek}: Props) {
 
+  //@ts-ignore
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-  const token = localStorage.getItem("access-token");
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const websiteRef = useRef<HTMLInputElement>(null);
@@ -119,10 +119,7 @@ export default function NewBookmark({onExit, onAdd, teamId, dek}: Props) {
     e.preventDefault();
     try{
       setLoading(true);
-      const checked = await checkAuth(navigate);
-      if(checked){
-        const token = localStorage.getItem("access-token");
-      }
+      await checkAuth(navigate);
       let route = SERVER_URL + "/api/";
       route += dek ? "private" : "bookmarks";
       const requestBody = dek ? await encryptBookmark(dek, {
@@ -145,7 +142,7 @@ export default function NewBookmark({onExit, onAdd, teamId, dek}: Props) {
           headers: {
             "Content-Type" : "application/json",
             "Accept" : "application/json",
-            "Authorization" : `Bearer ${token}`
+            "Authorization" : `Bearer ${state.token}`
           },
           body: JSON.stringify(requestBody)
         })
@@ -155,7 +152,7 @@ export default function NewBookmark({onExit, onAdd, teamId, dek}: Props) {
           return;
         }
         const bookmark = dek ? await decryptBookmark(dek, {ciphertext: bookmarkInfo.cipher, iv: bookmarkInfo.iv}) : bookmarkInfo
-        onAdd((prev: any) => [...prev, bookmark]);
+        state.bookmarks.push(bookmark);
         setError("");
         onExit();
       }

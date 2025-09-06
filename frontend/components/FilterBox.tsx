@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import EditTitle from "../components/EditTitle"
+import Loading from "./Loading";
+import state from "../store";
 
 type Props = {
     filter: string,
@@ -11,7 +13,7 @@ type Props = {
 }
 
 export default function FilterBox({onExit, filter, setFilter, sectionTitle, folderId, teamId}: Props) {
-
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
@@ -35,7 +37,7 @@ export default function FilterBox({onExit, filter, setFilter, sectionTitle, fold
             const request = await fetch(route, {
                 method: "PATCH",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`,
+                    "Authorization" : `Bearer ${state.token}`,
                     "Content-Type" : "application/json",
                 },
                 body: JSON.stringify({
@@ -80,6 +82,7 @@ export default function FilterBox({onExit, filter, setFilter, sectionTitle, fold
 
     return (
         <>
+        {loading && <Loading/>}
         {editing && <EditTitle onExit={() => setEditing(false)} error={error} titleRef={titleRef} handleNameChange={handleNameChange}/>}
         <div id="filter-box">
             <h3>{sectionTitle}

@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+import state from '../store';
 
 type Props = {}
 
@@ -7,12 +8,13 @@ export default function Join({}: Props) {
     const { id } = useParams();
     const navigate = useNavigate();
     async function joinTeam(){
+        //@ts-ignore
         const SERVER_URL = import.meta.env.VITE_SERVER_URL;
         try{
             const request = await fetch(`${SERVER_URL}/api/teams/${id}/members`, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             if(!request.ok){

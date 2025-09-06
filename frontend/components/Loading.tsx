@@ -1,8 +1,4 @@
-import React from 'react'
-
-type Props = {}
-
-export default function Loading({}: Props) {
+export default function Loading() {
   return (
     <div
     style={{

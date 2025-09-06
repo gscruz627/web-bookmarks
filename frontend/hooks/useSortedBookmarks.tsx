@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MediaType } from "../enums";
 
 export default function useSortedBookmarks(
-  bookmarks: any[],
+  bookmarks: readonly any[],
   filter: string,
   search: string,
   mediaFilter: MediaType

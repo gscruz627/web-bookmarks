@@ -3,18 +3,16 @@ import checkAuth from "../functions/auth";
 import "../styles/NewBookmark.css"
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import state from "../store";
 type Props = {
-  id?: string
   onExit: () => void;
-  onAdd: (prev:any) => void;
   cardInfo: any;
   dek?: CryptoKey
 }
 
-export default function EditBookmark({id,cardInfo,onExit, onAdd, dek}: Props) {
-  console.log(id);
+export default function EditBookmark({cardInfo,onExit, dek}: Props) {
+    // @ts-ignore
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-  const token = localStorage.getItem("access-token");
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const websiteRef = useRef<HTMLInputElement>(null);
@@ -96,19 +94,15 @@ const toB64 = (buf: ArrayBuffer) =>
     e.preventDefault();
     try{
       setLoading(true);
-      const checked = await checkAuth(navigate);
-      if(checked){
-        const token = localStorage.getItem("access-token");
-      }
-      console.log(cardInfo);
+      await checkAuth(navigate);
       let route = `${SERVER_URL}/api/`
-      route += dek ? `private/${id}` : `bookmarks/${cardInfo.id ?? id}` 
+      route += dek ? `private/${cardInfo.id}` : `bookmarks/${cardInfo.id}` 
       const request = await fetch(route, {
           method: dek ? "PUT" : "PATCH",
           headers: {
             "Content-Type" : "application/json",
             "Accept" : "application/json",
-            "Authorization" : `Bearer ${token}`
+            "Authorization" : `Bearer ${state.token}`
           },
           body: dek ? JSON.stringify(await encryptBookmark(dek,{
             "iconUrl": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
@@ -131,8 +125,7 @@ const toB64 = (buf: ArrayBuffer) =>
           return;
         }
         const bookmark = await request.json();
-        onAdd((prev: any) => [...prev, bookmark]);
-        onExit();
+        state.bookmarks = state.bookmarks.map( b => b.id === cardInfo.id ? bookmark : b);
       }
       catch(error: any){
         setError(error.message);

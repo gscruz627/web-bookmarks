@@ -7,6 +7,7 @@ type Props = {}
 
 export default function Register({}: Props) {
 
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const navigate = useNavigate();
 

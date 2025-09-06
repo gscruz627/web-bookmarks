@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom"
+import { useSnapshot } from "valtio";
+import state from "../store"
 export default function Home() {
-    const isAuth: boolean = Boolean(localStorage.getItem("access-token"));
+    const snap:any = useSnapshot(state);
+    const isAuth:boolean = snap.user?.userId !== null;
     return (
     <section>
         <nav>
             <div>
+                <p>Usenrame is: {state.user?.username ?? ""} </p>
+                <button onClick={() => state.user = {userId: "1", username: "helloworld"}}>cc</button>
             <Link to="/"><h3>Web Bookmarks</h3></Link>
             <a href="https://github.com/gscruz627">[GH] Github Repository</a>
             </div>

@@ -2,16 +2,16 @@ import { useRef, useState } from "react";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 import checkAuth from "../functions/auth";
+import state from "../store";
 
 type Props = {
     onExit: () => void,
-    onAdd: (prev: any) => void
 }
 
-export default function AddTeam({onExit, onAdd}: Props) {
+export default function AddTeam({onExit}: Props) {
 
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-    const token = localStorage.getItem("access-token");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     
@@ -29,7 +29,7 @@ export default function AddTeam({onExit, onAdd}: Props) {
                 headers: {
                     "Content-Type" : "application/json",
                     "Accept" : "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${state.token}`
                 },
                 body: JSON.stringify({
                     title: titleRef.current?.value,
@@ -40,8 +40,8 @@ export default function AddTeam({onExit, onAdd}: Props) {
                 setError(message);
                 return;
             }
-            const folder = await request.json();
-            onAdd((list:any) => [...list, folder]);
+            const team = await request.json();
+            state.teams.push(team);
             onExit();
         } catch(errorMsg:any){
             setError(errorMsg.message);

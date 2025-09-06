@@ -9,43 +9,42 @@ import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
 import NewBookmark from "../components/NewBookmark";
 import Confirm from "../components/Confirm"
+import { useSnapshot } from "valtio";
+import state from "../store";
 
 type Props = {}
 
 export default function TeamsBookmarks({}: Props) {
     const {id} = useParams()
+    //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    //@ts-ignore
     const CLIENT_URL = import.meta.env.VITE_CLIENT_URL;
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [newBookmark, setNewBookmmark] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
+    const [team, setTeam] = useState<any>(null);
     const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-    const [sectionTitle, setSectionTitle] = useState<string>("");
     const [copiedLink, setCopiedLink] = useState<boolean>(false);
-    const [ownerId, setOwnerId] = useState<string>("");
     const [viewMembers, setViewMembers] = useState<boolean>(false);
-    const [members, setMembers] = useState<Array<any>>([]);
     const [confirmLeave, setConfirmLeave] = useState<boolean>(false);
     const navigate = useNavigate();
-    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+
+    const snap = useSnapshot(state);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
 
     async function loadBookmarks(){
         try{
             setLoading(true);
-            console.log(localStorage.getItem("refresh-token"))
             await checkAuth(navigate);
-            console.log(localStorage.getItem("refresh-token"))
-            const userId = localStorage.getItem("userId");
             const request = await fetch(`${SERVER_URL}/api/teams/${id}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             if (!request.ok) {
@@ -66,13 +65,10 @@ export default function TeamsBookmarks({}: Props) {
                 return;
             }
             const team = await request.json();
-            setSectionTitle(team.title);
-            setOwnerId(team.ownerID);
-            setAllBookmarks(team.bookmarks);
-            setBookmarks(team.bookmarks);
-            setMembers(team.members);
+            setTeam(team);
+            state.bookmarks = team.bookmarks;
         } catch(errorMsg:any){
-            setError("error" + errorMsg.message);
+            setError(errorMsg)
         } finally{
             setLoading(false);
         }
@@ -81,19 +77,21 @@ export default function TeamsBookmarks({}: Props) {
     async function deleteTeam(){
         setLoading(true);
         try{
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/teams/${id}`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization" : `Bearer ${state.token}`
                 }
             })
             if(!request.ok){
-                setError("Something went wrong while deleting the team, you may not be the owner of the team");
+                const message = await request.json();
+                setError(message);
                 return;
             }
             navigate("/dashboard");
         } catch(error:any){
-            setError("Server error " + error.message);
+            setError(error.message);
         } finally{
             setLoading(false);
         }
@@ -111,7 +109,7 @@ export default function TeamsBookmarks({}: Props) {
 
     async function kickMember(userId: string){
         let confirmed;
-        if(userId === localStorage.getItem("userId")){
+        if(userId === snap.user?.userId){
             confirmed = true;
         } else {
             confirmed = confirm("Are you sure you want to delete this user?");
@@ -124,7 +122,7 @@ export default function TeamsBookmarks({}: Props) {
             const request = await fetch(`${SERVER_URL}/api/teams/${id}/members`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`,
+                    "Authorization" : `Bearer ${state.token}`,
                     "Content-Type" : "application/json"
                 },
                 body: JSON.stringify({
@@ -136,12 +134,15 @@ export default function TeamsBookmarks({}: Props) {
                 setError(message);
                 return;
             }
-            if(userId === localStorage.getItem("userId")){
+            // User himself is leaving the group.
+            if(userId === snap.user?.userId){
                 navigate("/dashboard")
             }
-            loadBookmarks();
+            setTeam({...team, members: team.members.filter((m:any) => m.id !== userId)})
         } catch(error: any){
             setError(error.message);
+        } finally{
+            setLoading(false);
         }
     }
 
@@ -153,7 +154,7 @@ export default function TeamsBookmarks({}: Props) {
             {loading && <Loading/>}
 
             {newBookmark &&
-                <NewBookmark onExit={() =>setNewBookmmark(false)} onAdd={setAllBookmarks} teamId={id}/>
+                <NewBookmark onExit={() =>setNewBookmmark(false)} teamId={id}/>
             }
 
             {confirmDelete &&
@@ -161,7 +162,7 @@ export default function TeamsBookmarks({}: Props) {
             }
 
             {confirmLeave &&
-                <Confirm next={() => kickMember(localStorage.getItem("userId")!)} typeText="Leave" onExit={() => setConfirmLeave(false)}/>
+                <Confirm next={() => kickMember(state.user?.userId!)} typeText="Leave" onExit={() => setConfirmLeave(false)}/>
             }
 
             {copiedLink &&
@@ -180,15 +181,14 @@ export default function TeamsBookmarks({}: Props) {
                         <h3>Team Members</h3>
                         <a role="button" onClick={() => setViewMembers(false)}>Close</a>
                         <ul>
-                        {members && members.length > 0 && members.map((member) => {
-                            const loggedInUserId = localStorage.getItem("userId");
+                        {team.members && team.members.length > 0 && team.members.map((member:any) => {
 
                             return (
                                 <li key={member.id}>
                                     <p>
                                         <i
                                             className={
-                                                member.id === ownerId
+                                                member.id === team.ownerId
                                                     ? "fa-solid fa-user-gear"
                                                     : "fa-regular fa-circle-user"
                                             }
@@ -196,7 +196,7 @@ export default function TeamsBookmarks({}: Props) {
                                         {member.username}
                                     </p>
 
-                                    {loggedInUserId === ownerId && member.id !== ownerId && (
+                                    {snap.user?.userId === team.ownerId && member.id !== team.ownerId && (
                                         <span onClick={() => kickMember(member.id)}>
                                             <i
                                                 style={{ color: "#bb1414", cursor: "pointer" }}
@@ -222,14 +222,14 @@ export default function TeamsBookmarks({}: Props) {
                             <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                         </form>
                         <button onClick={() => setNewBookmmark(true)} style={{backgroundColor: "#8645ff"}}>New Bookmark <i  className="fa-solid fa-circle-plus"></i> </button>
-                        {(ownerId === localStorage.getItem("userId")) && <button onClick={() => setConfirmDelete(true)} style={{backgroundColor: "#971717", marginLeft: "1rem"}}>Delete Team <i className="fa-solid fa-trash"></i></button>}
-                        {(ownerId !== localStorage.getItem("userId")) && <button onClick={() => setConfirmLeave(true)} style={{backgroundColor: "#971717",marginLeft: "1rem"}}>Leave Team <i className="fa-solid fa-door-open"></i></button>}
+                        {(team && team.ownerId === state.user?.userId) && <button onClick={() => setConfirmDelete(true)} style={{backgroundColor: "#971717", marginLeft: "1rem"}}>Delete Team <i className="fa-solid fa-trash"></i></button>}
+                        {(team && team.ownerId !== state.user?.userId) && <button onClick={() => setConfirmLeave(true)} style={{backgroundColor: "#971717",marginLeft: "1rem"}}>Leave Team <i className="fa-solid fa-door-open"></i></button>}
                         <button className="just-button" onClick={() => setViewMembers(true)} style={{margin: "0 1rem"}}><i className="fa-solid fa-people-group"></i></button>
                         <button className="just-button" onClick={() => copyLink()}><i className="fa-solid fa-user-plus"></i></button>
                         
                         </div>
 
-                        <FilterBox filter={filter} setFilter={setFilter} sectionTitle={sectionTitle} onExit={() => loadBookmarks()} teamId={id}/>                    
+                        <FilterBox filter={filter} setFilter={setFilter} sectionTitle={team && team.title} teamId={id}/>                    
 
                     <div id="media-type-selector">
                         <span className={mediaFilter === MediaType.Video ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Video ? MediaType.None : MediaType.Video)}><i className="fa-solid fa-file-video"></i> Video</span>
@@ -246,7 +246,7 @@ export default function TeamsBookmarks({}: Props) {
                             </div>
                         :
                             sortedBookmarks.map((bookmark) => (
-                                <Card bookmark={bookmark} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()} teamId={id}></Card>
+                                <Card bookmark={bookmark} key={bookmark.id} teamId={id}></Card>
                             ))
                         }
                     </div>

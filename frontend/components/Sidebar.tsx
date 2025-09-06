@@ -4,34 +4,34 @@ import AddFolder from "../components/AddFolder"
 import AddTeam from "../components/AddTeam"
 import checkAuth from "../functions/auth";
 import logout from "../functions/logout"
+import state from "../store";
+import { useSnapshot } from "valtio";
 
 type Props = {}
 
 export default function Sidebar({}: Props) {
 
+    // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("access-token");
     const [showNav, setShowNav] = useState<boolean>(true);
-    const [folders, setFolders] = useState<Array<any>>([]);
-    const [teams,  setTeams] = useState<Array<any>>([]);
-    const username = localStorage.getItem("username");
     const [addFolder, setAddFolder] = useState<boolean>(false);
     const [addTeam, setAddTeam] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    const snap = useSnapshot(state);
+
     async function loadFolders(){
         try{
             await checkAuth(navigate);
-            const request = await fetch(`${SERVER_URL}/api/folders?userId=${userId}`, {
+            const request = await fetch(`${SERVER_URL}/api/folders?userId=${snap.user?.userId}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`,
+                    "Authorization": `Bearer ${state.token}`,
                     "Accept" : "Application/json"
                 }
             });
             const foldersResponse = await request.json();
-            setFolders(foldersResponse);
+            state.folders = foldersResponse;
         } catch(error:any){
             alert(error.message)
         }
@@ -40,14 +40,14 @@ export default function Sidebar({}: Props) {
     async function loadTeams(){
         try{
             await checkAuth(navigate);
-            const request = await fetch(`${SERVER_URL}/api/teams?userId=${userId}`, {
+            const request = await fetch(`${SERVER_URL}/api/teams?userId=${snap.user?.userId}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             const teamsResponse = await request.json();
-            setTeams(teamsResponse);
+            state.teams = teamsResponse;
         } catch(error: any){
             alert(error.message);
         }
@@ -69,16 +69,16 @@ export default function Sidebar({}: Props) {
     }, [])
     return (
         <>
-        {addFolder && <AddFolder onAdd={setFolders} onExit={() => setAddFolder(false)}/>}
-        {addTeam && <AddTeam onAdd={setTeams} onExit={() => setAddTeam(false)}/>}
+        {addFolder && <AddFolder onExit={() => setAddFolder(false)}/>}
+        {addTeam && <AddTeam onExit={() => setAddTeam(false)}/>}
         <nav>
             <Link to="/"><h3>Web Bookmarks </h3></Link>
             <i onClick={() => setShowNav(prev => !prev)} className="fa-solid fa-bars"></i>
             { showNav && 
             <div id="show-nav">
                 <div id="user-profile">
-                    <span>{username![0].toUpperCase()}</span>
-                    <p>{username}</p>
+                    <span>{snap.user?.username![0].toUpperCase()}</span>
+                    <p>{snap.user?.username}</p>
                 </div>
                 <ul>
                     <li onClick={() => navigate("/dashboard")}><i className="fa-solid fa-bookmark"></i>All Bookmarks</li>
@@ -87,9 +87,9 @@ export default function Sidebar({}: Props) {
                 </ul>
                 <hr/>
                 <ul>
-                    {folders.length > 0 ?
-                     folders.map( (folder) => (
-                        <li onClick={() => navigate(`/folders/${folder.id}`)}><i className="fa-solid fa-folder"></i>{folder.title}</li>
+                    {snap.folders?.length > 0 ?
+                     snap.folders.map( (folder) => (
+                        <li key={folder.id} onClick={() => navigate(`/folders/${folder.id}`)}><i className="fa-solid fa-folder"></i>{folder.title}</li>
                     )) 
                     :
                         <div className="sidebar-message">
@@ -100,8 +100,8 @@ export default function Sidebar({}: Props) {
                 </ul>
                 <hr/>
                 <ul>
-                    {teams.length > 0 ?
-                        teams.map( (team) => (
+                    {snap.teams.length > 0 ?
+                        snap.teams.map( (team) => (
                             <li onClick={() => navigate(`/teams/${team.id}`)}><i className="fa-solid fa-people-group"></i>{team.title}</li>
                         )) 
                     :

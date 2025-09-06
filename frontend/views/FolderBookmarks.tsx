@@ -8,6 +8,8 @@ import Sidebar from "../components/Sidebar";
 import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
 import Confirm from "../components/Confirm";
+import state from "../store";
+import { useSnapshot } from "valtio";
 
 type Props = {
 }
@@ -15,31 +17,29 @@ type Props = {
 export default function FolderBookmarks({}: Props) {
     
     const {id} = useParams()
+    //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
-    const [allBookmarks, setAllBookmarks] = useState<Array<any>>([]);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [bookmarks, setBookmarks] = useState<Array<any>>([]);
     const [sectionTitle ,setSectionTitle] = useState<string>("");
     const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
     const navigate = useNavigate();
-    const sortedBookmarks = useSortedBookmarks(allBookmarks, filter, search, mediaFilter);
+    
+    const snap = useSnapshot(state);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
     
     async function loadBookmarks(){
         try{
             setLoading(true);
-            console.log(localStorage.getItem("refresh-token"))
             await checkAuth(navigate);
-            console.log(localStorage.getItem("refresh-token"))
-            const userId = localStorage.getItem("userId");
             const request = await fetch(`${SERVER_URL}/api/folders/${id}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization": `Bearer ${state.token}`
                 }
             });
             if (!request.ok) {
@@ -61,8 +61,7 @@ export default function FolderBookmarks({}: Props) {
             }
             const folder = await request.json();
             setSectionTitle(folder.title);
-            setAllBookmarks(folder.bookmarks);
-            setBookmarks(folder.bookmarks);
+            state.bookmarks = folder.bookmarks;
         } catch(errorMsg:any){
             setError(errorMsg.message);
         } finally{
@@ -70,34 +69,32 @@ export default function FolderBookmarks({}: Props) {
         }
     }
 
-    async function archive(id:number){
-        setLoading(true);
-        try{
-            await checkAuth(navigate);
-            const request = await fetch(`${SERVER_URL}/api/bookmarks/${id}`, {
-                method: "PATCH",
-                headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem('access-token')}`,
-                    "Content-Type" : "Application/json",
-                    "Accept": "application/json",
-                },
-                body: JSON.stringify({
-                    archived: true
-                })
-            });
-            if(!request.ok){
-                console.log("somethiing went wrong");
-                setError("Something went wrong while archiving, please try again.");
-                return;
+    async function removeFromFolder(folderId: string){
+            setLoading(true)
+            try{
+                await checkAuth(navigate);
+                const request = await fetch(`${SERVER_URL}/api/folders/${id}/bookmarks`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "Authorization" : `Bearer ${state.token}`
+                    },
+                    body: JSON.stringify({
+                        "bookmarkID": folderId
+                    })
+                });
+                if(!request.ok){
+                    const message = await request.json();
+                    setError(message);
+                    return;
+                }
+                state.bookmarks = state.bookmarks.filter(b => b.id !== folderId);
+            } catch(error:any){
+                setError(error.message);
+            } finally{
+                setLoading(false);
             }
-            await loadBookmarks();
-        } catch(error: any){
-            console.log("something weent wrong");
-            setError(error.Message)
-        } finally{
-            setLoading(false);
         }
-    }
 
     async function deleteFolder(){
         setLoading(true);
@@ -105,7 +102,7 @@ export default function FolderBookmarks({}: Props) {
             const request = await fetch(`${SERVER_URL}/api/folders/${id}`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization" : `Bearer ${localStorage.getItem("access-token")}`
+                    "Authorization" : `Bearer ${state.token}`
                 }
             });
             if(!request.ok){
@@ -163,12 +160,11 @@ export default function FolderBookmarks({}: Props) {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card folderId={id} bookmark={bookmark} archive={() => archive(bookmark.id)} id={bookmark.id} title={bookmark.title} baseSite={bookmark.baseSite} iconUrl={bookmark.iconURL} mediaType={bookmark.mediaType}  archived={bookmark.archived} folders={bookmark.folders} key={bookmark.id} link={bookmark.link} onExit={() => loadBookmarks()}></Card>
+                            <Card key={bookmark.id} folderId={id} bookmark={bookmark} removeFromFolder={() => removeFromFolder(bookmark.id)}></Card>
                         ))
                     }
                 </div>
             </div>
-
         </div>
     </>
     )
