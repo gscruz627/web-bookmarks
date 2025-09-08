@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -115,10 +119,6 @@
       "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\teamdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\teamdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -226,24 +226,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "20250816163125_RemovedMediaURL.cs",
-              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250816163125_RemovedMediaURL.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250816163125_RemovedMediaURL.cs",
-              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250816163125_RemovedMediaURL.cs",
-              "RelativeToolTip": "Migrations\\20250816163125_RemovedMediaURL.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T04:13:20.328Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "20250817171039_AddedDateAdded.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250817171039_AddedDateAdded.cs",
               "RelativeDocumentMoniker": "Migrations\\20250817171039_AddedDateAdded.cs",
@@ -256,12 +243,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Program.cs*",
-              "RelativeToolTip": "Program.cs*",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Program.cs",
+              "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-12T22:14:03.974Z",
@@ -269,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "BookmarksController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\BookmarksController.cs",
               "RelativeDocumentMoniker": "Controllers\\BookmarksController.cs",
@@ -282,7 +269,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TeamsController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\TeamsController.cs",
               "RelativeDocumentMoniker": "Controllers\\TeamsController.cs",
@@ -295,7 +282,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "20250813223249_ModifiedUser.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250813223249_ModifiedUser.cs",
               "RelativeDocumentMoniker": "Migrations\\20250813223249_ModifiedUser.cs",
@@ -308,7 +295,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "20250812223411_Initial-Migration.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250812223411_Initial-Migration.cs",
               "RelativeDocumentMoniker": "Migrations\\20250812223411_Initial-Migration.cs",
@@ -321,7 +308,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
+              "RelativeDocumentMoniker": "Dockerfile",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
+              "RelativeToolTip": "Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-14T21:47:22.854Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "20250816163125_RemovedMediaURL.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250816163125_RemovedMediaURL.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250816163125_RemovedMediaURL.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250816163125_RemovedMediaURL.cs",
+              "RelativeToolTip": "Migrations\\20250816163125_RemovedMediaURL.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T04:13:20.328Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "TeamInfoDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamInfoDTO.cs",
               "RelativeDocumentMoniker": "DTO\\TeamInfoDTO.cs",
@@ -334,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "20250819030509_AddedFolder.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250819030509_AddedFolder.cs",
               "RelativeDocumentMoniker": "Migrations\\20250819030509_AddedFolder.cs",
@@ -347,7 +360,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "PrivateBookmarksController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateBookmarksController.cs",
               "RelativeDocumentMoniker": "Controllers\\PrivateBookmarksController.cs",
@@ -360,7 +373,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "FoldersController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\FoldersController.cs",
               "RelativeDocumentMoniker": "Controllers\\FoldersController.cs",
@@ -373,7 +386,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "PrivateBookmarkInfoDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkInfoDTO.cs",
               "RelativeDocumentMoniker": "DTO\\PrivateBookmarkInfoDTO.cs",
@@ -386,7 +399,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "PrivateBookmarkDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkDTO.cs",
               "RelativeDocumentMoniker": "DTO\\PrivateBookmarkDTO.cs",
@@ -399,7 +412,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "TeamContentsDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamContentsDTO.cs",
               "RelativeDocumentMoniker": "DTO\\TeamContentsDTO.cs",
@@ -412,7 +425,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "PrivateVaultsController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateVaultsController.cs",
               "RelativeDocumentMoniker": "Controllers\\PrivateVaultsController.cs",
@@ -425,7 +438,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "FolderInfoDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderInfoDTO.cs",
               "RelativeDocumentMoniker": "DTO\\FolderInfoDTO.cs",
@@ -438,7 +451,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "BookmarkInfoDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkInfoDTO.cs",
               "RelativeDocumentMoniker": "DTO\\BookmarkInfoDTO.cs",
@@ -451,7 +464,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "SearchesController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\SearchesController.cs",
               "RelativeDocumentMoniker": "Controllers\\SearchesController.cs",
@@ -464,7 +477,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Bookmark.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Bookmark.cs",
               "RelativeDocumentMoniker": "Models\\Bookmark.cs",
@@ -477,7 +490,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "PrivateBookmark.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateBookmark.cs",
               "RelativeDocumentMoniker": "Models\\PrivateBookmark.cs",
@@ -490,7 +503,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
@@ -503,7 +516,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "Team.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Team.cs",
               "RelativeDocumentMoniker": "Models\\Team.cs",
@@ -516,7 +529,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "BookmarkDTO.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkDTO.cs",
               "RelativeDocumentMoniker": "DTO\\BookmarkDTO.cs",
@@ -529,7 +542,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "BookmarksDBContext.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Data\\BookmarksDBContext.cs",
               "RelativeDocumentMoniker": "Data\\BookmarksDBContext.cs",
@@ -542,7 +555,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "Folder.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Folder.cs",
               "RelativeDocumentMoniker": "Models\\Folder.cs",
@@ -555,7 +568,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "PrivateVault.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateVault.cs",
               "RelativeDocumentMoniker": "Models\\PrivateVault.cs",
@@ -568,7 +581,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\User.cs",
               "RelativeDocumentMoniker": "Models\\User.cs",
@@ -581,7 +594,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -590,19 +603,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-08-12T23:01:34.632Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "Dockerfile",
-              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
-              "RelativeDocumentMoniker": "Dockerfile",
-              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
-              "RelativeToolTip": "Dockerfile",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-08-14T21:47:22.854Z",
               "EditorCaption": ""
             },
             {
