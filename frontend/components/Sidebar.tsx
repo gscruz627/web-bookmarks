@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnapshot } from "valtio";
+import useTheme from "../hooks/useTheme"
+
 import AddFolder from "../components/AddFolder"
 import AddTeam from "../components/AddTeam"
 import checkAuth from "../functions/auth";
 import logout from "../functions/logout"
 import state from "../store";
-import { useSnapshot } from "valtio";
 
-type Props = {}
-
-export default function Sidebar({}: Props) {
-
+export default function Sidebar() {
+    
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const snap = useSnapshot(state);
+    const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+
     const [showNav, setShowNav] = useState<boolean>(true);
     const [addFolder, setAddFolder] = useState<boolean>(false);
     const [addTeam, setAddTeam] = useState<boolean>(false);
-    const navigate = useNavigate();
 
-    const snap = useSnapshot(state);
 
     async function loadFolders(){
         try{
@@ -32,8 +34,8 @@ export default function Sidebar({}: Props) {
             });
             const foldersResponse = await request.json();
             state.folders = foldersResponse;
-        } catch(error:any){
-            alert(error.message)
+        } catch(err:unknown){
+            alert("Something went wrong: " + err)
         }
     }
 
@@ -48,8 +50,8 @@ export default function Sidebar({}: Props) {
             });
             const teamsResponse = await request.json();
             state.teams = teamsResponse;
-        } catch(error: any){
-            alert(error.message);
+        } catch(err: unknown){
+            alert("Something went wrong: " + err)
         }
     }
     useEffect(() => {
@@ -67,6 +69,7 @@ export default function Sidebar({}: Props) {
         loadFolders();
         loadTeams();
     }, [])
+
     return (
         <>
         {addFolder && <AddFolder onExit={() => setAddFolder(false)}/>}
@@ -102,7 +105,7 @@ export default function Sidebar({}: Props) {
                 <ul>
                     {snap.teams.length > 0 ?
                         snap.teams.map( (team) => (
-                            <li onClick={() => navigate(`/teams/${team.id}`)}><i className="fa-solid fa-people-group"></i>{team.title}</li>
+                            <li key={team.id} onClick={() => navigate(`/teams/${team.id}`)}><i className="fa-solid fa-people-group"></i>{team.title}</li>
                         )) 
                     :
                         <div className="sidebar-message">
@@ -114,7 +117,17 @@ export default function Sidebar({}: Props) {
                 <ul>
                     <li onClick={() => navigate("/settings")}><i className="fa-solid fa-gear"></i>Account</li>
                     <li onClick={() => logout(navigate)}><i className="fa-solid fa-right-from-bracket"></i>Log Out</li>
-                    <li><i className="fa-solid fa-moon"></i>Dark Theme</li>
+                    <li onClick={toggleTheme}>
+                    {theme === "dark" ? (
+                        <>
+                        <i className="fa-solid fa-sun"></i> Light Theme
+                        </>
+                    ) : (
+                        <>
+                        <i className="fa-solid fa-moon"></i> Dark Theme
+                        </>
+                    )}
+                    </li>
                 </ul>
             </div>
             }

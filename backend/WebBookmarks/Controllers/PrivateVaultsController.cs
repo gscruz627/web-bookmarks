@@ -12,22 +12,15 @@ namespace WebBookmarks.Controllers
 {
     [Route("api/vaults")]
     [ApiController]
-    public class PrivateVaultsController : ControllerBase
+    public class PrivateVaultsController(BookmarksDBContext dbContext) : ControllerBase
     {
-        private readonly BookmarksDBContext _dbContext;
-
-        public PrivateVaultsController(BookmarksDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetVault()
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbContext.Users.FindAsync(userId))!;
-            PrivateVault? vault = await _dbContext.PrivateVaults.FirstOrDefaultAsync(v => v.OwnerID == userId);
+            User user = (await dbContext.Users.FindAsync(userId))!;
+            PrivateVault? vault = await dbContext.PrivateVaults.FirstOrDefaultAsync(v => v.OwnerID == userId);
             if(vault is null)
             {
                 return Ok(new { doesNotHaveVault = true });
@@ -49,8 +42,8 @@ namespace WebBookmarks.Controllers
         public async Task<IActionResult> CreateVault(PrivateVaultDTO vaultDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbContext.Users.FindAsync(userId))!;
-            PrivateVault? vault = await _dbContext.PrivateVaults.FirstOrDefaultAsync(v => v.OwnerID == userId);
+            User user = (await dbContext.Users.FindAsync(userId))!;
+            PrivateVault? vault = await dbContext.PrivateVaults.FirstOrDefaultAsync(v => v.OwnerID == userId);
             if(vault is not null) { return Conflict("Vault already exists."); }
 
             PrivateVault newVault = new PrivateVault()
@@ -65,6 +58,9 @@ namespace WebBookmarks.Controllers
             };
             user.VaultID = newVault.Id;
 
+            await dbContext.PrivateVaults.AddAsync(newVault);
+            await dbContext.SaveChangesAsync();
+
             PrivateVaultInfoDTO infoDTO = new()
             {
                 Id = newVault.Id,
@@ -74,8 +70,7 @@ namespace WebBookmarks.Controllers
                 WrappedDEK = newVault.WrappedDEK,
                 WrapIV = newVault.WrapIV,
             };
-            await _dbContext.PrivateVaults.AddAsync(newVault);
-            await _dbContext.SaveChangesAsync();
+
             return Ok(infoDTO);
         }
 

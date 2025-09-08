@@ -21,14 +21,19 @@ export default function Join({}: Props) {
                 alert("Something went wrong while adding you to this team, error code: " + request.statusText);
             }
             navigate(`/teams/${id}`)
-        } catch(error:any){
-            alert("Error: " + error.message);
+        } catch(err:unknown){
+            alert("Something went wrong: " + err)
         }
     }
 
     useEffect( () => {
+        if(!state.token){
+            navigate(`/login?refTeamId=${id}`)
+            return;
+        }
         joinTeam();
     }, [])
+
     return (
         <div className="center-box">
             <h3>Joining your Team...</h3>

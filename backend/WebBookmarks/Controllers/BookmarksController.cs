@@ -11,23 +11,17 @@ namespace WebBookmarks.Controllers
 {
     [Route("api/bookmarks")]
     [ApiController]
-    public class BookmarksController : ControllerBase
+    public class BookmarksController(BookmarksDBContext dbcontext) : ControllerBase
     {
-        private readonly BookmarksDBContext _dbcontext;
-        public BookmarksController(BookmarksDBContext dbcontext)
-        {
-            _dbcontext = dbcontext;
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<List<BookmarkInfoDTO>>> Get([FromQuery] Guid? userId, [FromQuery] bool archived = false)
         {
-            IQueryable<Bookmark> bookmarksQueryable = _dbcontext.Bookmarks.Include(b => b.Folders).AsQueryable();
+            IQueryable<Bookmark> bookmarksQueryable = dbcontext.Bookmarks.Include(b => b.Folders).AsQueryable();
             if(userId is not null)
             {
                 Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-                User? user = await _dbcontext.Users.FindAsync(userId);
+                User? user = await dbcontext.Users.FindAsync(userId);
                 if(user is null) { return BadRequest("Non-existant UserId"); }
                 if(loggedInUserId == userId)
                 {
@@ -63,15 +57,15 @@ namespace WebBookmarks.Controllers
         [Authorize]
         public async Task<ActionResult<BookmarkInfoDTO>> GetById(Guid id)
         {
-            Bookmark? bookmark = await _dbcontext.Bookmarks.FindAsync(id);
+            Bookmark? bookmark = await dbcontext.Bookmarks.FindAsync(id);
+            if (bookmark is null) { return NotFound(); }
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if(loggedInUserId != bookmark.AuthorID)
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
             }
-            if (bookmark is null) { return  NotFound(); }
 
-            BookmarkInfoDTO infoDTO = new BookmarkInfoDTO
+            BookmarkInfoDTO infoDTO = new()
             {
                 Archived = bookmark.Archived,
                 Id = bookmark.Id,
@@ -92,10 +86,10 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<BookmarkInfoDTO>> Post([FromBody] BookmarkDTO bookmarkDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User? user = await _dbcontext.Users.FindAsync(userId);
+            User? user = await dbcontext.Users.FindAsync(userId);
             if (user is null) { return BadRequest(); }
 
-            Bookmark bookmark = new Bookmark
+            Bookmark bookmark = new()
             {
                 IconURL = bookmarkDTO.IconURL,
                 Title = bookmarkDTO.Title,
@@ -111,13 +105,17 @@ namespace WebBookmarks.Controllers
                 bookmark.Author = user;
             } else
             {
-                Team? team = await _dbcontext.Teams.Include(t => t.Members).FirstOrDefaultAsync( t => t.Id == bookmarkDTO.TeamId);
+                Team? team = await dbcontext.Teams.Include(t => t.Members).FirstOrDefaultAsync( t => t.Id == bookmarkDTO.TeamId);
                 if(team is null) { return BadRequest("Team does not exist"); }
                 if (!(team.Members.Contains(user))) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
                 bookmark.TeamID = bookmarkDTO.TeamId;
                 bookmark.Team = team;
             }
-            BookmarkInfoDTO infoDTO = new BookmarkInfoDTO
+
+            await dbcontext.Bookmarks.AddAsync(bookmark);
+            await dbcontext.SaveChangesAsync();
+
+            BookmarkInfoDTO infoDTO = new()
             {
                 Archived = bookmark.Archived,
                 Id = bookmark.Id,
@@ -129,9 +127,6 @@ namespace WebBookmarks.Controllers
                 DateAdded = bookmark.DateAdded,
                 Folders = bookmark.Folders.Select(f => new FolderInfoDTO { Id = f.Id, Title = f.Title }).ToList()
             };
-            await _dbcontext.Bookmarks.AddAsync(bookmark);
-            await _dbcontext.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetById), new { bookmark.Id }, infoDTO);
         }
 
@@ -139,7 +134,7 @@ namespace WebBookmarks.Controllers
         [Authorize]
         public async Task<ActionResult<BookmarkInfoDTO>> Patch(Guid id, [FromBody] BookmarkPatchDTO patchDTO)
         {
-            Bookmark? bookmark = await _dbcontext.Bookmarks.FindAsync(id);
+            Bookmark? bookmark = await dbcontext.Bookmarks.FindAsync(id);
             if(bookmark is null) { return NotFound(); }
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             if (bookmark is null) { return NotFound(); }
@@ -169,7 +164,8 @@ namespace WebBookmarks.Controllers
                 bookmark.Archived = patchDTO.Archived ?? false;  
             }
 
-            BookmarkInfoDTO infoDTO = new BookmarkInfoDTO
+            await dbcontext.SaveChangesAsync();
+            BookmarkInfoDTO infoDTO = new()
             {
                 Archived = bookmark.Archived,
                 Id = bookmark.Id,
@@ -181,8 +177,6 @@ namespace WebBookmarks.Controllers
                 DateAdded = bookmark.DateAdded,
                 Folders = bookmark.Folders.Select(f => new FolderInfoDTO { Id = f.Id, Title = f.Title }).ToList()
             };
-
-            await _dbcontext.SaveChangesAsync();
             return Ok(infoDTO);
         }
 
@@ -191,7 +185,7 @@ namespace WebBookmarks.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            Bookmark? bookmark = await _dbcontext.Bookmarks.Include(b => b.Folders).FirstOrDefaultAsync(b => b.Id == id);
+            Bookmark? bookmark = await dbcontext.Bookmarks.Include(b => b.Folders).FirstOrDefaultAsync(b => b.Id == id);
 
             if (bookmark is null) { return NotFound(); }
             if (bookmark.AuthorID is not null)
@@ -203,8 +197,8 @@ namespace WebBookmarks.Controllers
                 if(bookmark.Team.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content."); }
             }
             bookmark.Folders.Clear();
-            _dbcontext.Bookmarks.Remove(bookmark);
-            await _dbcontext.SaveChangesAsync();
+            dbcontext.Bookmarks.Remove(bookmark);
+            await dbcontext.SaveChangesAsync();
 
             return NoContent();
         }

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
+import Loading from "./Loading";
 import checkAuth from "../functions/auth";
 import state from "../store";
 
@@ -12,15 +12,14 @@ export default function AddTeam({onExit}: Props) {
 
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
-    
     const navigate = useNavigate();
 
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
     const titleRef = useRef<HTMLInputElement>(null);
+
     async function handleSubmit(e: React.FormEvent){
         e.preventDefault();
-
         setLoading(true);
         try{
             await checkAuth(navigate);
@@ -43,8 +42,8 @@ export default function AddTeam({onExit}: Props) {
             const team = await request.json();
             state.teams.push(team);
             onExit();
-        } catch(errorMsg:any){
-            setError(errorMsg.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }

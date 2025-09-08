@@ -1,24 +1,24 @@
 import { useRef, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import "../styles/Auth.css";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { jwtDecode} from "jwt-decode";
+
 import Loading from "../components/Loading";
 import state from "../store"
+import type { CustomJwtPayload } from "../enums";
 
-type Props = {}
+export default function Login() {
 
-export default function Login({}: Props) {
-
+    // @ts-ignore
+    const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const navigate = useNavigate();
+    const [params] = useSearchParams();
+    const refTeamId = params.get("refTeamId");
 
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-    // @ts-ignore
-    const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
     async function handleSubmit(e: React.FormEvent){
         e.preventDefault();
@@ -42,7 +42,7 @@ export default function Login({}: Props) {
             }
 
             // Decode the JWT
-            const contents: any = jwtDecode(tokens.accessToken);
+            const contents = jwtDecode<CustomJwtPayload>(tokens.accessToken);
             const username = contents["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
             const userId = contents["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
             const expiryTime = contents.exp;
@@ -54,7 +54,7 @@ export default function Login({}: Props) {
             }
             state.token = tokens.accessToken;
             state.refreshToken = tokens.refreshToken;
-            state.expiry = expiryTime;
+            state.expiry = String(expiryTime);
 
             // Change on Local Storage for persistance.
             localStorage.setItem("access-token", tokens.accessToken);
@@ -63,9 +63,15 @@ export default function Login({}: Props) {
             localStorage.setItem("username", username!);
             localStorage.setItem("expiry-date", String(expiryTime)!);
             localStorage.setItem("user", JSON.stringify({ userId, username }));
+
+
+            if(refTeamId){
+                navigate(`/join/${refTeamId}`);
+                return;
+            }
             navigate("/dashboard");
-        } catch(error: any){
-            setError(error.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -83,8 +89,7 @@ export default function Login({}: Props) {
                 <label htmlFor="password">Password: </label>
                 <input ref={passwordRef} type="password" name="password" id="password" />
                 <button type="submit">Login</button>
-
-                <Link to="/register"><small>I don't have an account</small></Link>
+                <Link to={refTeamId ? `/register?refTeamId=${refTeamId}` : "/register"}><small>I don't have an account</small></Link>
             </form>
         </div>
         </>

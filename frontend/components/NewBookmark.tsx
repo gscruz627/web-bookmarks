@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import checkAuth from "../functions/auth";
-import "../styles/NewBookmark.css"
 import { useNavigate } from "react-router-dom";
+import checkAuth from "../functions/auth";
 import Loading from "./Loading";
 import state from "../store";
+import { encryptBookmark, decryptBookmark } from "../functions/vault";
+
 type Props = {
   onExit: () => void;
   teamId?: string;
@@ -14,16 +15,18 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
 
   //@ts-ignore
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+  const navigate = useNavigate();
+
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const websiteRef = useRef<HTMLInputElement>(null);
   const mediaSelectionRef = useRef<HTMLSelectElement>(null);
   const iconRef = useRef<HTMLImageElement>(null);
+  
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
-  function normalizeUrl(input: any) {
+  function normalizeUrl(input: string) {
     if (!/^https?:\/\//i.test(input)) {
       input = "https://" + input;
     }
@@ -38,7 +41,7 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
     try{
       setLoading(true);
       linkRef.current!.value = normalizeUrl(linkRef.current!.value) || linkRef.current!.value;
-      const request = await fetch(linkRef.current!.value);
+      const request = await fetch(`${SERVER_URL}/api/searches?query=${linkRef.current!.value}`);
       if(!request.ok){
         setError("A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.")
       }
@@ -64,56 +67,11 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
       const icoUrl = new URL(doc.querySelector('link[rel="icon"]')?.getAttribute("href")!, linkRef.current!.value);
       iconRef.current!.src = icoUrl.toString() || "";
       setError("");
-    } catch(error: any){
+    } catch(error: unknown){
       setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
     } finally{
       setLoading(false);
     }
-  }
-
-  const toB64 = (buf: ArrayBuffer) =>
-  btoa(String.fromCharCode(...new Uint8Array(buf)));
-
-  function fromB64(b64: string): ArrayBuffer {
-    const bin = atob(b64);
-    const buf = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-    return buf.buffer;
-  }
-
-  async function decryptBookmark(
-  dek: CryptoKey,
-  encrypted: { ciphertext: string; iv: string }
-  ) {
-    const ciphertext = fromB64(encrypted.ciphertext);
-    const iv = new Uint8Array(fromB64(encrypted.iv));
-
-    const plaintextBuf = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv },
-      dek,
-      ciphertext
-    );
-
-    return JSON.parse(new TextDecoder().decode(plaintextBuf));
-  }
-
-  async function encryptBookmark(
-  dek: CryptoKey,
-  data: any
-  ) {
-    const iv = crypto.getRandomValues(new Uint8Array(12));          // 12-byte GCM IV
-    const plaintext = new TextEncoder().encode(JSON.stringify(data));
-
-    const ciphertext = await crypto.subtle.encrypt(
-      { name: "AES-GCM", iv },                                       // (optionally add: , additionalData: aad )
-      dek,
-      plaintext
-    );
-
-    return {
-      cipher: toB64(ciphertext),
-      iv: toB64(iv.buffer),
-    };
   }
   async function handleSubmit(e: React.FormEvent){
     e.preventDefault();
@@ -122,13 +80,22 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
       await checkAuth(navigate);
       let route = SERVER_URL + "/api/";
       route += dek ? "private" : "bookmarks";
-      const requestBody = dek ? await encryptBookmark(dek, {
+      console.log(dek);
+      console.log({
         "iconUrl": iconRef.current!.src,
         "title": titleRef.current?.value,
         "link" : linkRef.current?.value,
         "baseSite": websiteRef.current?.value,
         "mediaType": mediaSelectionRef.current?.value,
         "teamId" : teamId ?? null
+      })
+      const requestBody = dek ? await encryptBookmark(dek, {
+        "iconURL": iconRef.current!.src,
+        "title": titleRef.current!!.value,
+        "link" : linkRef.current!.value,
+        "baseSite": websiteRef.current!.value,
+        "mediaType": mediaSelectionRef.current!.value,
+        "teamId" : teamId ?? undefined
       }) : {
         "iconUrl": iconRef.current!.src,
         "title": titleRef.current?.value,
@@ -137,6 +104,7 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
         "mediaType": mediaSelectionRef.current?.value,
         "teamId" : teamId ?? null
       }
+      console.log(requestBody)
       const request = await fetch(route, {
           method: "POST",
           headers: {
@@ -156,8 +124,8 @@ export default function NewBookmark({onExit, teamId, dek}: Props) {
         setError("");
         onExit();
       }
-      catch(error: any){
-        setError(error.message);
+      catch(err: unknown){
+        setError("Something went wrong: " + err)
       } finally{
         setLoading(false)
       }

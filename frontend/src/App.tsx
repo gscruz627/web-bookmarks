@@ -1,5 +1,18 @@
-import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSnapshot } from 'valtio'
+
+// Import CSS
+import './App.css'
+import '../styles/dashboard.css'
+import '../styles/buttons.css'
+import '../styles/add-box.css'
+import '../styles/boxes.css'
+import '../styles/card.css'
+import '../styles/dashboard.css'
+import '../styles/modal.css'
+
+// Import Routes
 import state from '../store'
 import Home from "../views/Home"
 import Bookmarks from "../views/Bookmarks"
@@ -11,24 +24,33 @@ import TeamBookmarks from "../views/TeamsBookmarks"
 import PrivateBookmarks from "../views/PrivateBookmarks"
 import Settings from "../views/Settings"
 import Join from "../components/Join"
-import { useEffect, useState } from 'react'
-import { useSnapshot } from 'valtio'
 
 function App() {
 
+  // Setup Valtio => Snapshot and rehydration.
   const snap = useSnapshot(state);
   const [rehydrated, setRehydrated] = useState(false);
-  useEffect(() => {
-    const savedToken = localStorage.getItem('access-token');
-    const savedRefresh = localStorage.getItem('refresh-token');
-    const savedUser = localStorage.getItem('user');
 
+  useEffect(() => {
+    // Get permanent saves
+    const savedToken = localStorage.getItem("access-token");
+    const savedRefresh = localStorage.getItem("refresh-token");
+    const savedUser = localStorage.getItem("user");
+    const savedTheme = localStorage.getItem("theme");
+
+    // If there are permanent saves, setup Valtio to use them.
+    state.theme = savedTheme === "dark" ? "dark" : "light";
     if (savedToken) state.token = savedToken;
     if (savedRefresh) state.refreshToken = savedRefresh;
     if (savedUser) state.user = JSON.parse(savedUser);
-    setRehydrated(true); // mark as ready after hydration
-  }, []);
 
+    // Apply theme immediately
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(state.theme);
+
+    setRehydrated(true);
+}, []);
+  
   if (!rehydrated) return null;
   
   return (
@@ -43,7 +65,7 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/settings" element={snap.token ? <Settings/> : <Navigate to="/login"/>}/>
-        <Route path="/join/:id" element={snap.token ? <Join/> : <Navigate to="/login/:teamId"/>}/>
+        <Route path="/join/:id" element={<Join/>}/>
       </Routes>
     </BrowserRouter>
   )

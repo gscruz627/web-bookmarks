@@ -167,3 +167,5 @@ C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\obj\Debug\net9.0\WebB
 C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\obj\Debug\net9.0\ref\WebBookmarks.dll
 C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\bin\Debug\net9.0\Microsoft.Identity.Abstractions.dll
 C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\bin\Debug\net9.0\Npgsql.dll
+C:\Users\Gustavo\Desktop\webbookmarks\backend\WebBookmarks\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

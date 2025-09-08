@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebBookmarks.Data;
@@ -11,20 +12,14 @@ namespace WebBookmarks.Controllers
 {
     [Route("api/teams")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class TeamsController(BookmarksDBContext dbcontext) : ControllerBase
     {
-        private readonly BookmarksDBContext _dbcontext;
-        public TeamsController(BookmarksDBContext dbcontext)
-        {
-            _dbcontext = dbcontext;
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<List<Team>>> Get([FromQuery] Guid? userId)
         {
             Guid loggedInUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            IQueryable<Team> teamsQueryable = _dbcontext.Teams.Include(t => t.Members).AsQueryable();
+            IQueryable<Team> teamsQueryable = dbcontext.Teams.Include(t => t.Members).AsQueryable();
 
             if(userId is not null)
             {
@@ -32,7 +27,7 @@ namespace WebBookmarks.Controllers
                 {
                     return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
                 }
-                User? user = await _dbcontext.Users.FindAsync(userId);
+                User? user = await dbcontext.Users.FindAsync(userId);
                 if(user is null) { return BadRequest("Non-Existant User"); }
                 teamsQueryable = teamsQueryable.Where(t => t.Members.Contains(user));
             }
@@ -42,11 +37,11 @@ namespace WebBookmarks.Controllers
 
         [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<ActionResult<object>> GetById(Guid id)
+        public async Task<ActionResult<TeamContentsDTO>> GetById(Guid id)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbcontext.Users.FindAsync(userId))!;
-            var team = await _dbcontext.Teams
+            User user = (await dbcontext.Users.FindAsync(userId))!;
+            var team = await dbcontext.Teams
                 .Include(t => t.Members)
                 .Include(t => t.Bookmarks)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -58,39 +53,39 @@ namespace WebBookmarks.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "You cannot access this content");
             }
-            var result = new
-            {
-                team.Id,
-                team.Title,
-                team.OwnerID,
-                Members = team.Members.Select(u => new
-                {
-                    u.Id,
-                    u.Username
-                }),
-                Bookmarks = team.Bookmarks.Select(b => new
-                {
-                    b.Id,
-                    b.Title,
-                    b.Link,
-                    b.BaseSite,
-                    b.Folders,
-                    b.Archived,
-                    b.DateAdded,
-                    b.IconURL,
-                    b.MediaType
-                })
-            };
 
-            return Ok(result);
+            TeamContentsDTO teamInfo = new()
+            {
+                Id = team.Id,
+                Title = team.Title,
+                OwnerID = team.OwnerID,
+                Members = team.Members.Select(u => new UserInfoDTO
+                {
+                    UserId = u.Id,
+                    Username = u.Username
+                }).ToList(),
+                Bookmarks = team.Bookmarks.Select(b => new BookmarkInfoDTO
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Link = b.Link,
+                    BaseSite = b.BaseSite,
+                    Folders = b.Folders.Select(f => new FolderInfoDTO { Id =f.Id, Title = f.Title}).ToList(),
+                    Archived = b.Archived,
+                    DateAdded = b.DateAdded,
+                    IconURL = b.IconURL,
+                    MediaType = b.MediaType
+                }).ToList()
+            };
+            return Ok(teamInfo);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<List<Team>>> Post(TeamDTO teamDTO)
+        public async Task<ActionResult<TeamInfoDTO>> Post(TeamDTO teamDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbcontext.Users.FindAsync(userId))!;
+            User user = (await dbcontext.Users.FindAsync(userId))!;
             Team team = new Team
             {
                 Title = teamDTO.Title,
@@ -99,27 +94,45 @@ namespace WebBookmarks.Controllers
             };
             team.Members.Add(user);
             user.Teams.Add(team);
-            await _dbcontext.Teams.AddAsync(team);
-            await _dbcontext.SaveChangesAsync();
+            await dbcontext.Teams.AddAsync(team);
+            await dbcontext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { team.Id }, team);
+            TeamInfoDTO infoDTO = new() { Id = team.Id, Title = team.Title };
+            return CreatedAtAction(nameof(GetById), new { team.Id }, infoDTO);
         }
 
         [HttpPost("{id:guid}/members")]
         [Authorize]
         public async Task<IActionResult> JoinTeam(Guid id)
         {
-            Team? team = await _dbcontext.Teams
+            Team? team = await dbcontext.Teams
                 .Include(t => t.Members)
                 .FirstOrDefaultAsync(t => t.Id == id);
             if (team is null) { return NotFound(); }
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User user = (await _dbcontext.Users.FindAsync(userId))!;
-            if (!team.Members.Any(m => m.Id == userId))
+            User user = (await dbcontext.Users.FindAsync(userId))!;
+            bool alreadyMember = await dbcontext.Teams
+                .Where(t => t.Id == id)
+                .SelectMany(t => t.Members)
+                .AnyAsync(m => m.Id == userId);
+
+            if (!alreadyMember)
             {
                 team.Members.Add(user);
+                user.Teams.Add(team);
             }
-            await _dbcontext.SaveChangesAsync();
+            try
+            {
+                await dbcontext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627) // 2627 = PK violation
+            {
+                /* I could not find the source of this issue in some cases, whether the user is already on this 
+                 team oor not, a PK duplicate error is thrown, the join table may correctly add a new record
+                 or not, depending on the actual chhecking mechanism above, but regardless, sometimes this error is
+                 thrown, so if this is the issue, ignore.
+                */
+            }
 
             return NoContent();
         }
@@ -129,14 +142,13 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<Folder>> ChangeTitle(Guid id, [FromBody] NameDTO teamDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            Team? team = await _dbcontext.Teams.FindAsync(id);
+            Team? team = await dbcontext.Teams.FindAsync(id);
             if (team is null) { return NotFound(); }
             if (team.OwnerID != userId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
 
             team.Title = teamDTO.Title;
+            await dbcontext.SaveChangesAsync();
             TeamInfoDTO teamInfo = new() { Id = team.Id, Title = team.Title };
-            await _dbcontext.SaveChangesAsync();
-
             return Ok(teamInfo);
         }
 
@@ -145,7 +157,7 @@ namespace WebBookmarks.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            Team? team = await _dbcontext.Teams
+            Team? team = await dbcontext.Teams
                 .Include(t => t.Members).Include(t => t.Bookmarks)
                 .FirstOrDefaultAsync(t => t.Id == id);
             if (team is null) { return NotFound(); }
@@ -155,8 +167,8 @@ namespace WebBookmarks.Controllers
             }
             team.Members.Clear();
             team.Bookmarks.Clear();
-            _dbcontext.Teams.Remove(team);
-            await _dbcontext.SaveChangesAsync();
+            dbcontext.Teams.Remove(team);
+            await dbcontext.SaveChangesAsync();
 
             return NoContent();
         }
@@ -166,11 +178,11 @@ namespace WebBookmarks.Controllers
         public async Task<IActionResult> KickMember(Guid id, [FromBody] MemberDTO memberDTO)
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            Team? team = await _dbcontext.Teams
+            Team? team = await dbcontext.Teams
                 .Include(t => t.Members).FirstOrDefaultAsync(t => t.Id == id);
             if(team is null) { return NotFound(); }
 
-            User? targetUser = await _dbcontext.Users.FindAsync(memberDTO.UserId);
+            User? targetUser = await dbcontext.Users.FindAsync(memberDTO.UserId);
             if(targetUser is null) { return BadRequest("User does not exist"); }
 
             if(!(userId == targetUser.Id)) 
@@ -187,7 +199,7 @@ namespace WebBookmarks.Controllers
             }
             targetUser.Teams.Remove(team);
             team.Members.Remove(targetUser);
-            await _dbcontext.SaveChangesAsync();
+            await dbcontext.SaveChangesAsync();
 
             return NoContent();
         }

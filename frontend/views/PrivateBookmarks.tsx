@@ -1,24 +1,27 @@
-import { MediaType } from "../enums"
+import { MediaType, type BookmarkInfoDTO, type VaultInfoDTO } from "../enums"
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSnapshot } from "valtio";
+
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
 import checkAuth from "../functions/auth";
-import { useNavigate } from "react-router-dom";
 import NewBookmark from "../components/NewBookmark";
 import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
-import { useSnapshot } from "valtio";
 import state from "../store";
 
-type Props = {}
+import {decryptBookmark, base64ToArrayBuffer, toB64} from "../functions/vault"
 
-export default function PrivateBookmarks({}: Props) {
+export default function PrivateBookmarks() {
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const snap = useSnapshot(state);
     const navigate = useNavigate();
+ 
     const [hasUnlocked, setHasUnlocked] = useState<boolean>(false);
-    const [vaultInfo, setVaultInfo] = useState<any>(null);
+    const [vaultInfo, setVaultInfo] = useState<VaultInfoDTO | null>(null);
     const [newBookmark, setNewBookmark] = useState<boolean>(false);
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
@@ -28,13 +31,12 @@ export default function PrivateBookmarks({}: Props) {
     const [vaultDek, setVaultDek] = useState<CryptoKey|undefined>(undefined);
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
 
-    const snap = useSnapshot(state);
-    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks as Array<BookmarkInfoDTO>, filter, search, mediaFilter);
     
     async function loadVault(){
-        await checkAuth(navigate);
         setLoading(true);
         try{
+            await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/vaults`, {
                 method: "GET",
                 headers: {
@@ -51,8 +53,8 @@ export default function PrivateBookmarks({}: Props) {
             if(!result.doesNotHaveVault){
                 setVaultInfo(result)
             }
-        } catch(error:any){
-            setError(error.message)
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -61,27 +63,6 @@ export default function PrivateBookmarks({}: Props) {
     useEffect(() => {
         loadVault();
     }, [])
-    function fromB64(b64: string): ArrayBuffer {
-        const bin = atob(b64);
-        const buf = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-        return buf.buffer;
-    }
-
-    async function decryptBookmark(
-      dek: CryptoKey,
-      encrypted: { ciphertext: string; iv: string }
-      ) {
-        console.log(dek);
-          const ciphertext = fromB64(encrypted.ciphertext);
-          const iv = new Uint8Array(fromB64(encrypted.iv));
-          const plaintextBuf = await crypto.subtle.decrypt(
-            { name: "AES-GCM", iv },
-            dek,
-            ciphertext
-          );
-        return JSON.parse(new TextDecoder().decode(plaintextBuf));
-       }
 
     async function loadBookmarks(){
         try{
@@ -106,8 +87,8 @@ export default function PrivateBookmarks({}: Props) {
                 bookmarksDecrypted.push(decrypted);
             }
             state.bookmarks = bookmarksDecrypted;
-        } catch(errorMsg:any){
-            setError(errorMsg.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -124,11 +105,9 @@ export default function PrivateBookmarks({}: Props) {
                 false,
                 ["deriveKey"]
             );
-            const salt = base64ToArrayBuffer(vaultInfo.kdfSalt);
-            const iterations = vaultInfo.kdfIterations;
-            console.log(vaultInfo.kdfHash);
-            const hashAlg: AlgorithmIdentifier = {name: vaultInfo.kdfHash};
-            console.log(hashAlg);
+            const salt = base64ToArrayBuffer(vaultInfo!.kdfSalt);
+            const iterations = vaultInfo?.kdfIterations;
+            const hashAlg: AlgorithmIdentifier = {name: vaultInfo!.kdfHash};
             const kek = await crypto.subtle.deriveKey(
                 {
                     name: "PBKDF2",
@@ -141,8 +120,8 @@ export default function PrivateBookmarks({}: Props) {
                 false,
                 ["encrypt", "decrypt"]
             );
-            const wrappedDEK = base64ToArrayBuffer(vaultInfo.wrappedDEK);
-            const wrapIV = base64ToArrayBuffer(vaultInfo.wrapIV);
+            const wrappedDEK = base64ToArrayBuffer(vaultInfo!.wrappedDEK);
+            const wrapIV = base64ToArrayBuffer(vaultInfo!.wrapIV);
             
             const rawDEK = await crypto.subtle.decrypt(
                 { name: "AES-GCM", iv: wrapIV},
@@ -159,12 +138,12 @@ export default function PrivateBookmarks({}: Props) {
             setError("");
             setVaultDek(dek);
             setHasUnlocked(true);
-        } catch(error: any){
+        } catch(error: unknown){
             if(error instanceof DOMException && error.name === "OperationError"){
                 setError("Wrong Master Password");
             } else {
                 console.error(error);
-                setError("Something went wrong while unlocking your vault:" + error.message);
+                setError("Something went wrong while unlocking your vault:" + error);
             }
         } finally{
             setLoading(false);
@@ -175,18 +154,6 @@ export default function PrivateBookmarks({}: Props) {
             loadBookmarks();
         }
     }, [vaultDek])
-    
-    function base64ToArrayBuffer(base64: string) {
-        const binary = atob(base64);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-    }
-    return bytes.buffer;
-    }
-    function bufToBase64(buf: ArrayBuffer) {
-        return btoa(String.fromCharCode(...new Uint8Array(buf)));
-    }
     
     async function handleCreateVault(e: React.FormEvent){
         setLoading(true);
@@ -243,11 +210,11 @@ export default function PrivateBookmarks({}: Props) {
                     "Content-Type" : "application/json",
                 },
                 body: JSON.stringify({
-                    kdfSalt: bufToBase64(kdfSalt.buffer),
+                    kdfSalt: toB64(kdfSalt.buffer),
                     kdfIterations: kdfIterations,
                     kdfHash: kdfHash,
-                    wrapIV: bufToBase64(wrapIV.buffer),
-                    wrappedDEK: bufToBase64(wrappedDEK)
+                    wrapIV: toB64(wrapIV.buffer),
+                    wrappedDEK: toB64(wrappedDEK)
                 })
             });
             if(!request.ok){
@@ -257,8 +224,8 @@ export default function PrivateBookmarks({}: Props) {
             }
             const vault = await request.json();
             setVaultInfo(vault);
-        } catch(error: any){
-            setError(error.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }

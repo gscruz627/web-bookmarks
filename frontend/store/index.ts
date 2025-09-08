@@ -1,17 +1,16 @@
 import { proxy } from "valtio";
+import type { BookmarkInfoDTO, FolderContentDTO, PrivateBookmarkInfoDTO, TeamInfoDTO, User } from "../enums";
 
-type User = {
-    userId: string,
-    username: string
-}
+
 const state = proxy<{
     user: User | null,
     token: string | null,
     expiry: string |null,
-    bookmarks: Array<any>,
+    bookmarks: Array<BookmarkInfoDTO | PrivateBookmarkInfoDTO>,
     refreshToken: string | null,
-    teams: Array<any>,
-    folders: Array<any>
+    teams: Array<TeamInfoDTO>,
+    folders: Array<FolderContentDTO>,
+    theme: "light" | "dark"
 }>({
     user: null,
     token: null,
@@ -19,7 +18,8 @@ const state = proxy<{
     bookmarks: [],
     refreshToken: null,
     teams: [],
-    folders: []
+    folders: [],
+    theme: "light"
 });
 
 export default state;

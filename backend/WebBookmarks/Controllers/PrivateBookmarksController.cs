@@ -70,7 +70,14 @@ namespace WebBookmarks.Controllers
 
             await _dbContext.PrivateBookmarks.AddAsync(bookmark);
             await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { bookmark.Id }, bookmark);
+            PrivateBookmarkInfoDTO bookmarkInfo = new()
+            {
+                Id = bookmark.Id,
+                Cipher = bookmark.Cipher,
+                Iv = bookmark.Iv,
+                DateAdded = bookmark.DateAdded
+            };
+            return CreatedAtAction(nameof(GetById), new { bookmark.Id }, bookmarkInfo);
         }
 
         [HttpPut("{id:guid}")]
@@ -84,6 +91,8 @@ namespace WebBookmarks.Controllers
             bookmark.Cipher = bookmarkDTO.Cipher;
             bookmark.Iv = bookmarkDTO.Iv;
 
+            await _dbContext.SaveChangesAsync();
+
             PrivateBookmarkInfoDTO bookmarkInfo = new()
             {
                 Id = bookmark.Id,
@@ -91,7 +100,6 @@ namespace WebBookmarks.Controllers
                 Iv = bookmark.Iv,
                 DateAdded = bookmark.DateAdded
             };
-            await _dbContext.SaveChangesAsync();
             return Ok(bookmarkInfo);
         }
 

@@ -2,7 +2,7 @@ type Props = {
     handleNameChange: (e: React.FormEvent) => void
     titleRef: React.Ref<HTMLInputElement>
     onExit: () => void
-    error: any
+    error: string
 }
 
 export default function EditTitle({titleRef, handleNameChange, onExit, error}: Props) {

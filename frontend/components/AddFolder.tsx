@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import checkAuth from "../functions/auth";
-import { useNavigate } from "react-router-dom";
 import state from "../store";
 
 type Props = {
@@ -12,12 +12,14 @@ export default function AddFolder({onExit}: Props) {
 
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
 
     const navigate = useNavigate();
-
+    
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
     const titleRef = useRef<HTMLInputElement>(null);
+
+
     async function handleSubmit(e: React.FormEvent){
         e.preventDefault();
 
@@ -43,8 +45,8 @@ export default function AddFolder({onExit}: Props) {
             const folder = await request.json();
             state.folders.push(folder);
             onExit();
-        } catch(errorMsg:any){
-            setError(errorMsg.message);
+        } catch(err:unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }

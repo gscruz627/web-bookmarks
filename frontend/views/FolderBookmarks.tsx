@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { MediaType } from "../enums";
+import { MediaType, type BookmarkInfoDTO } from "../enums";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSnapshot } from "valtio";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
+
 import checkAuth from "../functions/auth";
 import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
@@ -9,16 +11,15 @@ import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
 import Confirm from "../components/Confirm";
 import state from "../store";
-import { useSnapshot } from "valtio";
 
-type Props = {
-}
 
-export default function FolderBookmarks({}: Props) {
+export default function FolderBookmarks() {
     
     const {id} = useParams()
     //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const navigate = useNavigate();
+    const snap = useSnapshot(state);
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
@@ -27,14 +28,12 @@ export default function FolderBookmarks({}: Props) {
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
     const [sectionTitle ,setSectionTitle] = useState<string>("");
     const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-    const navigate = useNavigate();
     
-    const snap = useSnapshot(state);
-    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks as Array<BookmarkInfoDTO>, filter, search, mediaFilter);
     
     async function loadBookmarks(){
+        setLoading(true);
         try{
-            setLoading(true);
             await checkAuth(navigate);
             const request = await fetch(`${SERVER_URL}/api/folders/${id}`, {
                 method: "GET",
@@ -51,7 +50,7 @@ export default function FolderBookmarks({}: Props) {
                     errorMessage = data.message || "Unexpected error";
                 } else {
                     if(request.status === 404){
-                        errorMessage = "Team not found";
+                        errorMessage = "Folder not found";
                     } else {
                         errorMessage = await request.text();
                     }
@@ -62,8 +61,8 @@ export default function FolderBookmarks({}: Props) {
             const folder = await request.json();
             setSectionTitle(folder.title);
             state.bookmarks = folder.bookmarks;
-        } catch(errorMsg:any){
-            setError(errorMsg.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -89,8 +88,8 @@ export default function FolderBookmarks({}: Props) {
                     return;
                 }
                 state.bookmarks = state.bookmarks.filter(b => b.id !== folderId);
-            } catch(error:any){
-                setError(error.message);
+            } catch(err: unknown){
+                setError("Something went wrong: " + err)
             } finally{
                 setLoading(false);
             }
@@ -111,8 +110,8 @@ export default function FolderBookmarks({}: Props) {
                 return;
             }
             navigate("/dashboard");
-        } catch(error:any){
-            setError(error.message)
+        } catch(err:unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -121,6 +120,7 @@ export default function FolderBookmarks({}: Props) {
     useEffect( () => {
         loadBookmarks();
     }, [id])
+
     return (
     <>
         {loading && <Loading/>}
@@ -135,6 +135,7 @@ export default function FolderBookmarks({}: Props) {
 
             <div id="dashboard-body">
                 {error && <div className="error-box">{error}</div> }
+                {!error && <>
                 <div id="dashboard-body-nav">
                     <form>
                         <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
@@ -160,10 +161,11 @@ export default function FolderBookmarks({}: Props) {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card key={bookmark.id} folderId={id} bookmark={bookmark} removeFromFolder={() => removeFromFolder(bookmark.id)}></Card>
+                            <Card key={bookmark.id} folderId={id} bookmark={bookmark} removeFromFolder={() => removeFromFolder(bookmark.id!)}></Card>
                         ))
                     }
                 </div>
+                </>}
             </div>
         </div>
     </>

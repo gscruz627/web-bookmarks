@@ -9,18 +9,19 @@ type Props = {
     sectionTitle: string,
     folderId?: string,
     teamId?: string,
-    onExit?: any
+    onExit?: () => void
 }
 
 export default function FilterBox({onExit, filter, setFilter, sectionTitle, folderId, teamId}: Props) {
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
-    const titleRef = useRef<HTMLInputElement>(null);
 
+    const titleRef = useRef<HTMLInputElement>(null);
     const filterBoxRef = useRef<HTMLDivElement | null>(null);
     const filterButtonRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -44,14 +45,19 @@ export default function FilterBox({onExit, filter, setFilter, sectionTitle, fold
                     title: titleRef.current?.value
                 })
             });
+            const teamOrFolder = await request.json();
             if(!request.ok){
-                const message = await request.json();
-                setError(message);
+                setError(teamOrFolder);
             }
             setEditing(false);
-            onExit();
-        } catch(error: any){
-            setError("Server error: " + error.message);
+            if(folderId){
+                state.folders = state.folders.map(f => f.id === folderId ? teamOrFolder : f);
+            } else {
+                state.teams = state.teams.map(t => t.id === teamId ? teamOrFolder : t);
+            }
+            onExit?.();
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }

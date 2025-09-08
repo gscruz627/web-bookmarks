@@ -1,7 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { MediaType } from "../enums";
+import { MediaType, type BookmarkInfoDTO, type TeamContentDTO, type User } from "../enums";
 import { useEffect, useState } from "react";
+import { useSnapshot } from "valtio";
+import state from "../store";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
+
 import checkAuth from "../functions/auth";
 import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
@@ -9,17 +12,16 @@ import FilterBox from "../components/FilterBox";
 import Card from "../components/Card";
 import NewBookmark from "../components/NewBookmark";
 import Confirm from "../components/Confirm"
-import { useSnapshot } from "valtio";
-import state from "../store";
 
-type Props = {}
-
-export default function TeamsBookmarks({}: Props) {
+export default function TeamsBookmarks() {
     const {id} = useParams()
     //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     //@ts-ignore
     const CLIENT_URL = import.meta.env.VITE_CLIENT_URL;
+
+    const navigate = useNavigate();
+    const snap = useSnapshot(state);
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [newBookmark, setNewBookmmark] = useState<boolean>(false);
@@ -27,15 +29,12 @@ export default function TeamsBookmarks({}: Props) {
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const [team, setTeam] = useState<any>(null);
+    const [team, setTeam] = useState<TeamContentDTO | null>(null);
     const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
     const [copiedLink, setCopiedLink] = useState<boolean>(false);
     const [viewMembers, setViewMembers] = useState<boolean>(false);
     const [confirmLeave, setConfirmLeave] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-    const snap = useSnapshot(state);
-    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks as Array<BookmarkInfoDTO>, filter, search, mediaFilter);
 
     async function loadBookmarks(){
         try{
@@ -67,8 +66,8 @@ export default function TeamsBookmarks({}: Props) {
             const team = await request.json();
             setTeam(team);
             state.bookmarks = team.bookmarks;
-        } catch(errorMsg:any){
-            setError(errorMsg)
+        } catch(err: unknown){
+            setError("Something went wrong: " + err);
         } finally{
             setLoading(false);
         }
@@ -90,8 +89,8 @@ export default function TeamsBookmarks({}: Props) {
                 return;
             }
             navigate("/dashboard");
-        } catch(error:any){
-            setError(error.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -138,9 +137,9 @@ export default function TeamsBookmarks({}: Props) {
             if(userId === snap.user?.userId){
                 navigate("/dashboard")
             }
-            setTeam({...team, members: team.members.filter((m:any) => m.id !== userId)})
-        } catch(error: any){
-            setError(error.message);
+            setTeam({...team, members: team?.members.filter((m:User) => m.userId !== userId)} as TeamContentDTO)
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -181,14 +180,14 @@ export default function TeamsBookmarks({}: Props) {
                         <h3>Team Members</h3>
                         <a role="button" onClick={() => setViewMembers(false)}>Close</a>
                         <ul>
-                        {team.members && team.members.length > 0 && team.members.map((member:any) => {
+                        {team?.members && team.members.length > 0 && team.members.map((member:User) => {
 
                             return (
-                                <li key={member.id}>
+                                <li key={member.userId}>
                                     <p>
                                         <i
                                             className={
-                                                member.id === team.ownerId
+                                                member.userId === team.ownerID
                                                     ? "fa-solid fa-user-gear"
                                                     : "fa-regular fa-circle-user"
                                             }
@@ -196,8 +195,8 @@ export default function TeamsBookmarks({}: Props) {
                                         {member.username}
                                     </p>
 
-                                    {snap.user?.userId === team.ownerId && member.id !== team.ownerId && (
-                                        <span onClick={() => kickMember(member.id)}>
+                                    {(snap.user?.userId === team.ownerID) && (member.userId !== team.ownerID) && (
+                                        <span onClick={() => kickMember(member.userId)}>
                                             <i
                                                 style={{ color: "#bb1414", cursor: "pointer" }}
                                                 className="fa-solid fa-user-minus"
@@ -217,19 +216,20 @@ export default function TeamsBookmarks({}: Props) {
 
                 <div id="dashboard-body">
                     {error && <div className="error-box">{error}</div> }
+                    {!error && <>
                     <div id="dashboard-body-nav">
                         <form>
                             <input type="text" name="search" id="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                         </form>
                         <button onClick={() => setNewBookmmark(true)} style={{backgroundColor: "#8645ff"}}>New Bookmark <i  className="fa-solid fa-circle-plus"></i> </button>
-                        {(team && team.ownerId === state.user?.userId) && <button onClick={() => setConfirmDelete(true)} style={{backgroundColor: "#971717", marginLeft: "1rem"}}>Delete Team <i className="fa-solid fa-trash"></i></button>}
-                        {(team && team.ownerId !== state.user?.userId) && <button onClick={() => setConfirmLeave(true)} style={{backgroundColor: "#971717",marginLeft: "1rem"}}>Leave Team <i className="fa-solid fa-door-open"></i></button>}
+                        {(team && team.ownerID === state.user?.userId) && <button onClick={() => setConfirmDelete(true)} style={{backgroundColor: "#971717", marginLeft: "1rem"}}>Delete Team <i className="fa-solid fa-trash"></i></button>}
+                        {(team && team.ownerID !== state.user?.userId) && <button onClick={() => setConfirmLeave(true)} style={{backgroundColor: "#971717",marginLeft: "1rem"}}>Leave Team <i className="fa-solid fa-door-open"></i></button>}
                         <button className="just-button" onClick={() => setViewMembers(true)} style={{margin: "0 1rem"}}><i className="fa-solid fa-people-group"></i></button>
                         <button className="just-button" onClick={() => copyLink()}><i className="fa-solid fa-user-plus"></i></button>
                         
                         </div>
 
-                        <FilterBox filter={filter} setFilter={setFilter} sectionTitle={team && team.title} teamId={id}/>                    
+                        <FilterBox filter={filter} setFilter={setFilter} sectionTitle={team?.title ?? ""} teamId={id}/>                    
 
                     <div id="media-type-selector">
                         <span className={mediaFilter === MediaType.Video ? "media-type-selected" : ""} onClick={() => setMediaFilter(mediaFilter === MediaType.Video ? MediaType.None : MediaType.Video)}><i className="fa-solid fa-file-video"></i> Video</span>
@@ -250,6 +250,7 @@ export default function TeamsBookmarks({}: Props) {
                             ))
                         }
                     </div>
+                    </>}
                 </div>
 
             </div>

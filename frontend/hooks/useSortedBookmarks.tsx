@@ -1,14 +1,14 @@
 // useSortedBookmarks.ts
 import { useEffect, useState } from "react";
-import { MediaType } from "../enums";
+import { MediaType, type BookmarkInfoDTO} from "../enums";
 
 export default function useSortedBookmarks(
-  bookmarks: readonly any[],
+  bookmarks: Array<BookmarkInfoDTO>,
   filter: string,
   search: string,
   mediaFilter: MediaType
 ) {
-  const [sortedBookmarks, setSortedBookmarks] = useState<any[]>([]);
+  const [sortedBookmarks, setSortedBookmarks] = useState<Array<BookmarkInfoDTO>>([]);
 
   useEffect(() => {
     let sorted = [...bookmarks];
@@ -17,14 +17,14 @@ export default function useSortedBookmarks(
       case "Newest to Oldest (Added)":
         sorted.sort(
           (a, b) =>
-            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+            new Date(b.dateAdded!).getTime() - new Date(a.dateAdded!).getTime()
         );
         break;
 
       case "Oldest to Newest (Added)":
         sorted.sort(
           (a, b) =>
-            new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
+            new Date(a.dateAdded!).getTime() - new Date(b.dateAdded!).getTime()
         );
         break;
 

@@ -9,25 +9,18 @@ using System.Security.Cryptography;
 using System.Text;
 using WebBookmarks.Data;
 using WebBookmarks.DTO;
-using WebBookmarks.Migrations;
 using WebBookmarks.Models;
 
 namespace WebBookmarks.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(BookmarksDBContext dbcontext) : ControllerBase
     {
-        private readonly BookmarksDBContext _dbcontext;
-        public UsersController(BookmarksDBContext dbcontext)
-        {
-            _dbcontext = dbcontext;
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<UserInfoDTO>> GetById(Guid id)
         {
-            User? user = await _dbcontext.Users.FindAsync(id);
+            User? user = await dbcontext.Users.FindAsync(id);
             if (user is null) { return NotFound(); }
             UserInfoDTO userInfoDTO = new(){ UserId = user.Id, Username = user.Username};
             return Ok(userInfoDTO);
@@ -36,15 +29,15 @@ namespace WebBookmarks.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(NewUserDTO userDTO)
         {
-            User? existingUser = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);   
+            User? existingUser = await dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);   
             if(existingUser is not null) { return Conflict("User with username already exists, choose a different username"); }
 
             PasswordHasher<User> passwordHasher = new();
             string hashedPassword = passwordHasher.HashPassword(null, userDTO.Password);
 
             User user = new User { Username = userDTO.Username, Password = hashedPassword };
-            await _dbcontext.Users.AddAsync(user);
-            await _dbcontext.SaveChangesAsync();
+            await dbcontext.Users.AddAsync(user);
+            await dbcontext.SaveChangesAsync();
 
             return NoContent();
         }
@@ -52,7 +45,7 @@ namespace WebBookmarks.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokensDTO>> Login(NewUserDTO userDTO)
         {
-            User? user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
+            User? user = await dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
             if (user is null) {
                 return Unauthorized("Incorrect Username or Password");
             }
@@ -77,7 +70,7 @@ namespace WebBookmarks.Controllers
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryDate = DateTime.UtcNow.AddDays(7);
 
-            await _dbcontext.SaveChangesAsync();
+            await dbcontext.SaveChangesAsync();
             TokensDTO tokensDTO = new TokensDTO { AccessToken = accessToken, RefreshToken = refreshToken};
             
             return Ok(tokensDTO);
@@ -87,7 +80,7 @@ namespace WebBookmarks.Controllers
        
         public async Task<ActionResult<TokensDTO>> RefreshToken(RefreshTokenDTO tokenDTO)
         {
-            User? user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.RefreshToken == tokenDTO.RefreshToken);
+            User? user = await dbcontext.Users.FirstOrDefaultAsync(u => u.RefreshToken == tokenDTO.RefreshToken);
             Console.WriteLine($"User is null? {user is null}, User: {user}");
             Console.WriteLine($"Is Refresh token empty? {String.IsNullOrEmpty(tokenDTO.RefreshToken)}, token: {tokenDTO.RefreshToken}");
             if(user is null || String.IsNullOrEmpty(tokenDTO.RefreshToken))
@@ -105,12 +98,12 @@ namespace WebBookmarks.Controllers
             user.RefreshTokenExpiryDate = DateTime.UtcNow.AddDays(7);
             user.RefreshToken = refreshToken;
 
+            await dbcontext.SaveChangesAsync();
             TokensDTO tokensDTO = new TokensDTO
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
             };
-            await _dbcontext.SaveChangesAsync();
             return Ok(tokensDTO);
         }
 
@@ -120,23 +113,22 @@ namespace WebBookmarks.Controllers
         public async Task<ActionResult<UserInfoDTO>> Patch(Guid id, [FromBody] UserPatchDTO userDTO)
         {
             Guid loggedIdUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            User? user = await _dbcontext.Users.FindAsync(id);
+            User? user = await dbcontext.Users.FindAsync(id);
             if(user is null) { return NotFound(); }
             if(user.Id != loggedIdUserId) { return StatusCode(StatusCodes.Status403Forbidden, "You cannot modify this content"); }
 
-            User? checkUser = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
+            User? checkUser = await dbcontext.Users.FirstOrDefaultAsync(u => u.Username == userDTO.Username);
             if (checkUser is not null)
             {
                 return Conflict("Another user already has this username");
             }
             user.Username = userDTO.Username;
+            await dbcontext.SaveChangesAsync();
             UserInfoDTO userInfo = new()
             {
                 Username = user.Username,
                 UserId = user.Id
             };
-            await _dbcontext.SaveChangesAsync();
-
             return Ok(userInfo);
         }
 
@@ -149,22 +141,22 @@ namespace WebBookmarks.Controllers
             {
                 return Forbid("You cannot execute this action");
             }
-            User? user = await _dbcontext.Users.Include(u => u.OwnedTeams)
+            User? user = await dbcontext.Users.Include(u => u.OwnedTeams)
                    .Include(u => u.Teams)
                    .Include(u => u.Bookmarks)// member of other teams
                    .FirstOrDefaultAsync(u => u.Id == id);
             if(user is null) { return NotFound(); }
-            _dbcontext.Teams.RemoveRange(user.OwnedTeams);
+            dbcontext.Teams.RemoveRange(user.OwnedTeams);
 
-            List<Folder> folders = await _dbcontext.Folders.Where(f => f.OwnerID == id).ToListAsync();
-            _dbcontext.Folders.RemoveRange(folders);
-            _dbcontext.Bookmarks.RemoveRange(user.Bookmarks);
+            List<Folder> folders = await dbcontext.Folders.Where(f => f.OwnerID == id).ToListAsync();
+            dbcontext.Folders.RemoveRange(folders);
+            dbcontext.Bookmarks.RemoveRange(user.Bookmarks);
             foreach(Team team in user.Teams.ToList())
             {
                 team.Members.Remove(user);
             }
-            _dbcontext.Users.Remove(user);
-            await _dbcontext.SaveChangesAsync();
+            dbcontext.Users.Remove(user);
+            await dbcontext.SaveChangesAsync();
 
             return NoContent();
         }
@@ -179,6 +171,7 @@ namespace WebBookmarks.Controllers
             rg.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
+
         [NonAction]
         public string GetAccessToken(User user)
         {
@@ -199,5 +192,6 @@ namespace WebBookmarks.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
+
     }
 }

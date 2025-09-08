@@ -6,20 +6,20 @@ import Confirm from "../components/Confirm";
 import logout from "../functions/logout";
 import { useSnapshot } from "valtio";
 import state from "../store";
+import checkAuth from "../functions/auth";
 
-type Props = {}
 
-export default function Settings({}: Props) {
+export default function Settings() {
   //@ts-ignore
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+  const navigate = useNavigate();
+  const snap = useSnapshot(state);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  
   const usernameRef=  useRef<HTMLInputElement>(null);
-  const snap = useSnapshot(state);
-
-  const navigate = useNavigate();
 
   async function changeName(e: React.FormEvent){
     e.preventDefault();
@@ -28,6 +28,7 @@ export default function Settings({}: Props) {
     }
     setLoading(true);
     try{
+      await checkAuth(navigate);
       const request = await fetch(`${SERVER_URL}/api/users/${snap.user?.userId}`, {
         method: "PATCH",
         headers: {
@@ -44,10 +45,9 @@ export default function Settings({}: Props) {
         setError(userResponse);
         return;
       };
-      localStorage.setItem("username", userResponse.username);
-      window.location.reload();
-    } catch(error: any){
-      setError(error.message);
+      state.user = userResponse;
+    } catch(err: unknown){
+      setError("Something went wrong: " + err)
     } finally{
       setLoading(false);
     }
@@ -56,6 +56,7 @@ export default function Settings({}: Props) {
   async function deleteAccount(){
     setLoading(true);
     try{
+      await checkAuth(navigate);
       const request = await fetch(`${SERVER_URL}/api/users/${snap.user?.userId}`, {
         method: "DELETE",
         headers: {
@@ -68,8 +69,8 @@ export default function Settings({}: Props) {
       return;
       }
       logout(navigate)
-    } catch(error: any){
-      setError("Server error: " + error.message);
+    } catch(err: unknown){
+      setError("Something went wrong: " + err)
     } finally{
       setLoading(false);
     }

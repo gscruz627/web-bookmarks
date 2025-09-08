@@ -1,18 +1,21 @@
 import { useRef, useState } from "react";
-import checkAuth from "../functions/auth";
-import "../styles/NewBookmark.css"
 import { useNavigate } from "react-router-dom";
+import checkAuth from "../functions/auth";
 import Loading from "./Loading";
 import state from "../store";
+import {decryptBookmark, encryptBookmark} from "../functions/vault"
+import type { BookmarkInfoDTO } from "../enums";
 type Props = {
   onExit: () => void;
-  cardInfo: any;
+  cardInfo: BookmarkInfoDTO;
   dek?: CryptoKey
 }
 
 export default function EditBookmark({cardInfo,onExit, dek}: Props) {
-    // @ts-ignore
+  // @ts-ignore
   const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+  const navigate = useNavigate();
+
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const websiteRef = useRef<HTMLInputElement>(null);
@@ -20,29 +23,9 @@ export default function EditBookmark({cardInfo,onExit, dek}: Props) {
   const iconRef = useRef<HTMLImageElement>(null);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
-const toB64 = (buf: ArrayBuffer) =>
-  btoa(String.fromCharCode(...new Uint8Array(buf)));
-  async function encryptBookmark(
-  dek: CryptoKey,
-  data: any
-  ) {
-    const iv = crypto.getRandomValues(new Uint8Array(12));          // 12-byte GCM IV
-    const plaintext = new TextEncoder().encode(JSON.stringify(data));
 
-    const ciphertext = await crypto.subtle.encrypt(
-      { name: "AES-GCM", iv },                                       // (optionally add: , additionalData: aad )
-      dek,
-      plaintext
-    );
-
-    return {
-      cipher: toB64(ciphertext),
-      iv: toB64(iv.buffer),
-    };
-  }
-  function normalizeUrl(input: any) {
+  function normalizeUrl(input: string) {
     if (!/^https?:\/\//i.test(input)) {
       input = "https://" + input;
     }
@@ -57,7 +40,7 @@ const toB64 = (buf: ArrayBuffer) =>
     try{
       setLoading(true);
       linkRef.current!.value = normalizeUrl(linkRef.current!.value) || linkRef.current!.value;
-      const request = await fetch(linkRef.current!.value);
+      const request = await fetch(`${SERVER_URL}/api/searchers/?query=${linkRef.current!.value}`);
       if(!request.ok){
        setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
       }
@@ -83,8 +66,8 @@ const toB64 = (buf: ArrayBuffer) =>
       const icoUrl = new URL(doc.querySelector('link[rel="icon"]')?.getAttribute("href")!, linkRef.current!.value);
       iconRef.current!.src = icoUrl.toString() || "";
       setError("");
-    } catch(error: any){
-      setError(`A connection to that site was unsuccessful. The site may be blocking this request. Fill out the fields manually.`)
+    } catch(err: unknown){
+      setError("Something went wrong: " + err)
     } finally{
       setLoading(false);
     }
@@ -105,11 +88,11 @@ const toB64 = (buf: ArrayBuffer) =>
             "Authorization" : `Bearer ${state.token}`
           },
           body: dek ? JSON.stringify(await encryptBookmark(dek,{
-            "iconUrl": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
-            "title": titleRef.current?.value,
-            "link" : linkRef.current?.value,
-            "baseSite": websiteRef.current?.value,
-            "mediaType": mediaSelectionRef.current?.value,
+            "iconURL": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
+            "title": titleRef.current!.value,
+            "link" : linkRef.current!.value,
+            "baseSite": websiteRef.current!.value,
+            "mediaType": mediaSelectionRef.current!.value,
           })) : JSON.stringify({
             "iconUrl": iconRef.current!.src == "" ? cardInfo.iconURL : iconRef.current!.src,
             "title": titleRef.current?.value,
@@ -125,10 +108,12 @@ const toB64 = (buf: ArrayBuffer) =>
           return;
         }
         const bookmark = await request.json();
-        state.bookmarks = state.bookmarks.map( b => b.id === cardInfo.id ? bookmark : b);
+        const decryptedBookmark = dek ? await decryptBookmark(dek!, {ciphertext: bookmark.cipher, iv: bookmark.iv}) : bookmark;
+        state.bookmarks = state.bookmarks.map( b => b.id === cardInfo.id ? decryptedBookmark : b);
+        onExit?.();
       }
-      catch(error: any){
-        setError(error.message);
+      catch(err: unknown){
+        setError("Something went wrong: " + err)
       } finally{
         setLoading(false)
       }
@@ -150,9 +135,9 @@ const toB64 = (buf: ArrayBuffer) =>
         <button type="button" onClick={retrieveWebsiteData}>Retrieve Link data (ie. thumbnail)</button>
         <label htmlFor="website">Website:</label>
         <input type="text" name="website" id="website" defaultValue={cardInfo.baseSite} ref={websiteRef}/>
-        <img ref={iconRef} src={cardInfo.iconUrl}></img>
+        <img ref={iconRef} src={cardInfo.iconURL}></img>
         <label htmlFor="mediaSelection">Media Type:</label>
-        <select ref={mediaSelectionRef} name="mediaSelection" id="mediaSelection" value={cardInfo.mediaType}>
+        <select ref={mediaSelectionRef} name="mediaSelection" id="mediaSelection" defaultValue={cardInfo.mediaType}>
           <option value="Video">Video</option>
           <option value="Post">Post</option>
           <option value="Document">Document</option>

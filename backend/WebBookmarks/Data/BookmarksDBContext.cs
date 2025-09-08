@@ -3,12 +3,8 @@ using WebBookmarks.Models;
 
 namespace WebBookmarks.Data
 {
-    public class BookmarksDBContext : DbContext
+    public class BookmarksDBContext(DbContextOptions options) : DbContext(options)
     {
-        public BookmarksDBContext(DbContextOptions options) : base(options)
-        {
-        }
-
         public DbSet<User> Users { get; set; }
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Folder> Folders { get; set; }

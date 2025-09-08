@@ -1,0 +1,106 @@
+.modal-box{
+    position:fixed;
+    z-index: 1000;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-box form{
+    background-color: #FFF;
+    padding:2rem;
+    border-radius:5px;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    width:30%;
+    margin: auto auto;
+}
+.dark .modal-box form{
+  background-color: #1e1e1e;
+}
+.modal-box form h2{
+    text-align: center;
+}
+.dark .modal-box form h2{
+  color: #e0e0e0;
+}
+.modal-box form label{
+    color: #3b3b3b;
+    font-weight:bolder;
+}
+.dark .modal-box form label{
+  color: #e0e0e0;
+}
+.modal-box form input[type=text], .modal-box form select{
+    padding:0.5rem !important;
+    margin:1rem 0 !important;
+    outline:none !important;
+    border:1px solid #b8b8b8 !important;
+    border-radius:5px !important;
+    font-size:16px !important;
+    width:100% !important;
+    font-weight:bold !important;
+}
+
+.dark .modal-box form input[type=text], .dark .modal-box form select{
+  background-color: #1e1e1e;
+  border:1px solid #3b3b3b !important;
+  color: #e0e0e0;
+}
+.modal-box form button{
+    padding:0.5rem;
+    outline:none;
+    border:none;
+    background-color: #266fd5;
+    font-weight:bolder;
+    color:#FFF;
+    border-radius:5px;
+    font-size:18px;
+    margin:1rem 0;
+}
+.modal-box a{
+    text-align: center;
+    text-decoration: underline;
+    color:#d44545;
+    cursor:pointer;
+}
+.modal-box img{
+    width:30px;
+    margin: auto auto;
+}
+.modal-box ul{
+  list-style-type:none;
+  margin-top: 1rem;
+}
+.modal-box li{
+  font-size:18px;
+  border-top: 1px solid #b8b8b8;
+  padding: 1rem 0;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-half{
+    display:grid;
+    grid-template-columns: 50% 50%;
+    column-gap:2rem;
+}
+.modal-half button{
+    margin:1rem 0;
+}
+.modal-half img{
+    width:100%;
+    border-radius:15px;
+    box-shadow: 0 0 8px rgba(167,167,167,0.5);
+    padding:15px;
+}
+@media screen and (max-width: 768px){
+    .modal-half{
+        grid-template-columns: 100%;
+    }
+}

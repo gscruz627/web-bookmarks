@@ -1,36 +1,39 @@
 import { useState, useEffect} from "react";
+import { MediaType, type BookmarkInfoDTO } from "../enums";
+import {useNavigate } from "react-router-dom";
+import { useSnapshot } from "valtio";
+import checkAuth from "../functions/auth";
+
 import Card from "../components/Card";
 import NewBookmark from "../components/NewBookmark"
-import { MediaType } from "../enums";
-import {useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar"
-import "../styles/Bookmarks.css";
-import checkAuth from "../functions/auth";
 import Loading from "../components/Loading";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import FilterBox from "../components/FilterBox"
 import state from "../store";
-import { useSnapshot } from "valtio";
+
 export default function Bookmarks() {
 
     //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
     const snap = useSnapshot(state);
+    const navigate = useNavigate();
+
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [newBookmark, setNewBookmark] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
-    const navigate = useNavigate();
 
-    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks as Array<BookmarkInfoDTO>, filter, search, mediaFilter);
 
     async function loadBookmarks(){
+        setLoading(true);
         try{
-            setLoading(true);
             await checkAuth(navigate);
+            state.bookmarks = []
             const request = await fetch(`${SERVER_URL}/api/bookmarks/?userId=${snap.user?.userId}&archived=false`, {
                 method: "GET",
                 headers: {
@@ -44,8 +47,8 @@ export default function Bookmarks() {
             }
             const bookmarksResponse = await request.json();
             state.bookmarks = bookmarksResponse
-        } catch(errorMsg:any){
-            setError(errorMsg.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -72,14 +75,14 @@ export default function Bookmarks() {
                 return;
             }
             state.bookmarks = state.bookmarks.filter(b => b.id !== id)
-        } catch(error: any){
-            setError(error.Message)
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
     }
 
-    useEffect( () => {
+    useEffect(() => {
         loadBookmarks();
     }, [])
 
@@ -120,7 +123,7 @@ export default function Bookmarks() {
                         </div>
                     :
                         sortedBookmarks.map((bookmark) => (
-                            <Card bookmark={bookmark} archive={() => archive(bookmark.id)}></Card>
+                            <Card key={bookmark.id} bookmark={bookmark} archive={() => archive(bookmark.id!)}></Card>
                         ))
                     }
                 </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MediaType } from "../enums";
+import { MediaType, type BookmarkInfoDTO } from "../enums";
+import { useSnapshot } from "valtio";
 
 import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
@@ -10,15 +11,13 @@ import Card from "../components/Card";
 import useSortedBookmarks from "../hooks/useSortedBookmarks";
 import checkAuth from "../functions/auth";
 import state from "../store";
-import { useSnapshot } from "valtio";
 
-type Props = {}
-
-export default function ArchivedBookmarks({}: Props) {
+export default function ArchivedBookmarks() {
 
     //@ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const snap = useSnapshot(state);
+    const navigate = useNavigate();
 
     const [mediaFilter, setMediaFilter] = useState<MediaType>(MediaType.None);
     const [loading, setLoading] = useState<boolean>(false);
@@ -26,9 +25,8 @@ export default function ArchivedBookmarks({}: Props) {
     const [search, setSearch] = useState<string>("");
     const [filter, setFilter] = useState<string>("Oldest to Newest (Added)");
 
-    const navigate = useNavigate();
 
-    const sortedBookmarks = useSortedBookmarks(snap.bookmarks, filter, search, mediaFilter);
+    const sortedBookmarks = useSortedBookmarks(snap.bookmarks as Array<BookmarkInfoDTO>, filter, search, mediaFilter);
 
         async function loadBookmarks(){
             try{
@@ -47,8 +45,8 @@ export default function ArchivedBookmarks({}: Props) {
                 }
                 const bookmarksResponse = await request.json();
                 state.bookmarks = bookmarksResponse;
-            } catch(errorMsg:any){
-                setError(errorMsg.message);
+            } catch(err: unknown){
+                setError("Something went wrong: " + err)
             } finally{
                 setLoading(false);
             }
@@ -75,8 +73,8 @@ export default function ArchivedBookmarks({}: Props) {
                 return;
             }
             state.bookmarks = state.bookmarks.filter(b => b.id !== id)
-        } catch(error: any){
-            setError(error.Message)
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false)
         }
@@ -113,8 +111,8 @@ export default function ArchivedBookmarks({}: Props) {
                         <p> No Bookmarks found</p>
                     </div>
                 :
-                    sortedBookmarks.map((bookmark:any) => (
-                        <Card bookmark={bookmark} restore={() => restore(bookmark.id)}></Card>
+                    sortedBookmarks.map((bookmark:BookmarkInfoDTO) => (
+                        <Card bookmark={bookmark} restore={() => restore(bookmark.id!)}></Card>
                     ))
                 }
                     </div>

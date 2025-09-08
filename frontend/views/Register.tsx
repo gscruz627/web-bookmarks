@@ -1,15 +1,14 @@
 import { useRef, useState, useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom";
-import "../styles/Auth.css"
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../components/Loading";
 
-type Props = {}
-
-export default function Register({}: Props) {
+export default function Register() {
 
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
     const navigate = useNavigate();
+    const [params] = useSearchParams();
+    const refTeamId = params.get("refTeamId");
 
     const usernameRef = useRef<HTMLInputElement>(null);
     const [password, setPassword] = useState<string>("");
@@ -44,9 +43,13 @@ export default function Register({}: Props) {
                 }
                 return;
             }
+            if(refTeamId){
+                navigate(`/login?refTeamId=${refTeamId}`);
+                return;
+            }
             navigate("/login");
-        } catch(errorMsg:any) {
-            setError(errorMsg.message);
+        } catch(err: unknown) {
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -62,6 +65,7 @@ export default function Register({}: Props) {
             setError("")
         }
     }, [password, passwordCheck]);
+
     return (
         <>
         {loading && <Loading/>}
@@ -77,7 +81,7 @@ export default function Register({}: Props) {
                 <label htmlFor="passwordCheck">Verify: </label>
                 <input value={passwordCheck} onChange={(e) => setPasswordCheck(e.target.value)} type="password" name="passwordCheck" id="passwordCheck" />
                 <button type="submit">Register</button>
-                <Link to="/login"><small>Log In instead.</small></Link>
+                <Link to={refTeamId ? `/login?refTeamId=${refTeamId}` : "/login"}><small>Log In instead.</small></Link>
             </form>
         </div>
         </>

@@ -1,34 +1,37 @@
-import { useEffect, useRef, useState } from "react";
-import state from "../store";
-import "../styles/Card.css"
-import checkAuth from "../functions/auth";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSnapshot } from "valtio";
+
+import state from "../store";
+import checkAuth from "../functions/auth";
 import EditBookmark from "../components/EditBookmark"
 import Confirm from "./Confirm";
 import Loading from "./Loading";
-import { useSnapshot } from "valtio";
-interface props{
-    archive?: () => void
-    restore?: () => void
-    bookmark: any,
+import type { BookmarkInfoDTO, FolderInfoDTO } from "../enums";
+
+type props = {
+    bookmark: BookmarkInfoDTO,
     dek?: CryptoKey,
     folderId?: string,
     teamId?: string,
+    archive?: () => void
+    restore?: () => void
     onExit?: () => void,
     removeFromFolder?: () => void
 }
 export default function Card({dek, bookmark, onExit, archive, restore, folderId, teamId, removeFromFolder}: props) {
     // @ts-ignore
     const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+    const navigate = useNavigate();
+    const snap = useSnapshot(state);
+
     const [addToFolder, setAddToFolder] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-    const folderRef = useRef<HTMLSelectElement>(null);
-    const navigate = useNavigate();
     const [editing, setEditing] = useState<boolean>(false);
+    const folderRef = useRef<HTMLSelectElement>(null);
 
-    const snap = useSnapshot(state);
 
     async function handleAddToFolder(e: React.FormEvent){
         e.preventDefault();
@@ -47,14 +50,15 @@ export default function Card({dek, bookmark, onExit, archive, restore, folderId,
                     "bookmarkID": bookmark.id
                 })
             });
+            const bookmarkResponse = await request.json();
             if(!request.ok){
-                const message = await request.json();
-                setError(message);
+                setError(bookmarkResponse);
                 return;
             }
+            state.bookmarks = state.bookmarks.map(b => b.id === bookmark.id ? bookmarkResponse : b)
             setAddToFolder(false);
-        } catch(error:any){
-            alert(error.message);
+        } catch(err: unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -74,10 +78,11 @@ export default function Card({dek, bookmark, onExit, archive, restore, folderId,
                 setError(message);
                 return;
             }
+            state.bookmarks = state.bookmarks.filter(b => b.id !== id);
             setConfirmDelete(false);
             onExit?.();
-        } catch(error:any){
-            setError(error.message)
+        } catch(err:unknown){
+            setError("Something went wrong: " + err)
         } finally{
             setLoading(false);
         }
@@ -88,7 +93,7 @@ export default function Card({dek, bookmark, onExit, archive, restore, folderId,
         {loading && <Loading/>}
         {editing && <EditBookmark dek={dek} onExit={() => setEditing(false)} cardInfo={bookmark} />}
         {confirmDelete &&
-            <Confirm typeText="Bookmark" onExit={() => setConfirmDelete(false)} next={() => deleteBookmark(bookmark.id)}/>
+            <Confirm typeText="Bookmark" onExit={() => setConfirmDelete(false)} next={() => deleteBookmark(bookmark.id!)}/>
         }
         {addToFolder && 
             <div className="modal-box">
@@ -98,10 +103,10 @@ export default function Card({dek, bookmark, onExit, archive, restore, folderId,
                     <label htmlFor="folder">Folder: </label>
                     <select id="folder" ref={folderRef}>
                     {snap.folders && snap.folders
-                    .filter((folder: any) =>
-                        !bookmark.folders?.some((bf: any) => bf.id === folder.id)
+                    .filter((folder: FolderInfoDTO) =>
+                        !bookmark.folders?.some((bf: FolderInfoDTO) => bf.id === folder.id)
                     )
-                    .map((folder: any) => (
+                    .map((folder: FolderInfoDTO) => (
                         <option key={folder.id} value={folder.id}>
                         {folder.title}
                         </option>
@@ -112,16 +117,16 @@ export default function Card({dek, bookmark, onExit, archive, restore, folderId,
             </div>}
         <div>
         <a href={bookmark.link} style={{textDecoration:"none", color: "black"}}>
-            <div id="card">
+            <div className="card">
                 <div>
-                    <img src={bookmark.iconURL}></img>
+                    <img src={bookmark.iconURL || bookmark.iconURL}></img>
                     <h4>{bookmark.baseSite}</h4>
                 </div>
                 <p>{bookmark.title}</p>
                 <div>
                     <span>{bookmark.mediaType}</span>
-                    {bookmark.folders && bookmark.folders.map( (folder:any) => (
-                        <span style={{backgroundColor: "#eee78bff"}}>{folder.title}</span>
+                    {bookmark.folders && bookmark.folders.map( (folder:FolderInfoDTO) => (
+                        <span id={folder.id} style={{backgroundColor: "#eee78bff"}}>{folder.title}</span>
                     ))}
                 </div>
             </div>
