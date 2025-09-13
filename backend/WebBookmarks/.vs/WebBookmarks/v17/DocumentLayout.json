@@ -174,8 +174,7 @@
               "RelativeToolTip": "WebBookmarks.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-09-08T03:25:01.524Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-08T03:25:01.524Z"
             },
             {
               "$type": "Document",
@@ -187,8 +186,7 @@
               "RelativeToolTip": "Controllers\\BookmarksController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T16:36:22.775Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-16T16:36:22.775Z"
             },
             {
               "$type": "Document",
@@ -200,8 +198,7 @@
               "RelativeToolTip": "Controllers\\TeamsController.cs",
               "ViewState": "AgIAAHEAAAAAAAAAAAAjwH8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-20T22:15:49.911Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-20T22:15:49.911Z"
             },
             {
               "$type": "Document",
@@ -226,8 +223,7 @@
               "RelativeToolTip": "Controllers\\PrivateBookmarksController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-26T03:42:33.27Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-26T03:42:33.27Z"
             },
             {
               "$type": "Document",
@@ -239,8 +235,7 @@
               "RelativeToolTip": "Controllers\\PrivateVaultsController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T19:52:53.12Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-30T19:52:53.12Z"
             },
             {
               "$type": "Document",
@@ -252,8 +247,7 @@
               "RelativeToolTip": "Controllers\\SearchesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-06T16:36:43.85Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-06T16:36:43.85Z"
             },
             {
               "$type": "Document",
@@ -265,8 +259,7 @@
               "RelativeToolTip": "Controllers\\UsersController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAMIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:38:41.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:38:41.583Z"
             },
             {
               "$type": "Document",
@@ -278,8 +271,7 @@
               "RelativeToolTip": "Data\\BookmarksDBContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:17:16.546Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:17:16.546Z"
             },
             {
               "$type": "Document",
@@ -291,8 +283,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAADDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:14:03.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:14:03.974Z"
             },
             {
               "$type": "Document",
@@ -304,8 +295,7 @@
               "RelativeToolTip": "DTO\\TeamInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-31T23:37:58.589Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-31T23:37:58.589Z"
             },
             {
               "$type": "Document",
@@ -317,8 +307,7 @@
               "RelativeToolTip": "Controllers\\FoldersController.cs",
               "ViewState": "AgIAAKkAAAAAAAAAAABEwLEAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-19T02:43:05.208Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-19T02:43:05.208Z"
             },
             {
               "$type": "Document",
@@ -330,8 +319,7 @@
               "RelativeToolTip": "DTO\\PrivateBookmarkInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T02:18:26.699Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T02:18:26.699Z"
             },
             {
               "$type": "Document",
@@ -343,8 +331,7 @@
               "RelativeToolTip": "DTO\\PrivateBookmarkDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-31T03:24:59.783Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-31T03:24:59.783Z"
             },
             {
               "$type": "Document",
@@ -356,8 +343,7 @@
               "RelativeToolTip": "DTO\\TeamContentsDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-06T22:26:25.027Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-06T22:26:25.027Z"
             },
             {
               "$type": "Document",
@@ -369,8 +355,7 @@
               "RelativeToolTip": "DTO\\FolderInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T02:37:16.02Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T02:37:16.02Z"
             },
             {
               "$type": "Document",
@@ -382,8 +367,7 @@
               "RelativeToolTip": "DTO\\BookmarkInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-07T20:41:09.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-07T20:41:09.873Z"
             },
             {
               "$type": "Document",
@@ -395,8 +379,7 @@
               "RelativeToolTip": "Models\\Bookmark.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T16:16:53.756Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T16:16:53.756Z"
             },
             {
               "$type": "Document",
@@ -408,8 +391,7 @@
               "RelativeToolTip": "Models\\PrivateBookmark.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-26T03:28:55.635Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-26T03:28:55.635Z"
             },
             {
               "$type": "Document",
@@ -421,8 +403,7 @@
               "RelativeToolTip": "Models\\Team.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-20T22:38:30.413Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-20T22:38:30.413Z"
             },
             {
               "$type": "Document",
@@ -434,8 +415,7 @@
               "RelativeToolTip": "DTO\\BookmarkDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T04:38:26.332Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T04:38:26.332Z"
             },
             {
               "$type": "Document",
@@ -447,8 +427,7 @@
               "RelativeToolTip": "Models\\Folder.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-19T02:40:51.874Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-19T02:40:51.874Z"
             },
             {
               "$type": "Document",
@@ -460,8 +439,7 @@
               "RelativeToolTip": "Models\\PrivateVault.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T19:49:03.297Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-30T19:49:03.297Z"
             },
             {
               "$type": "Document",
@@ -473,8 +451,7 @@
               "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:20:06.73Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:20:06.73Z"
             },
             {
               "$type": "Document",
@@ -486,8 +463,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-12T23:01:34.632Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T23:01:34.632Z"
             },
             {
               "$type": "Document",
@@ -499,8 +475,7 @@
               "RelativeToolTip": "DTO\\TeamDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T00:14:35.59Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T00:14:35.59Z"
             },
             {
               "$type": "Document",
@@ -512,8 +487,7 @@
               "RelativeToolTip": "DTO\\FolderDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T02:37:02.984Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T02:37:02.984Z"
             },
             {
               "$type": "Document",
@@ -525,8 +499,7 @@
               "RelativeToolTip": "DTO\\FolderContentDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T02:49:48.615Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T02:49:48.615Z"
             },
             {
               "$type": "Document",
@@ -538,8 +511,7 @@
               "RelativeToolTip": "DTO\\PrivateVaultDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAABOwAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T16:21:04.362Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-30T16:21:04.362Z"
             },
             {
               "$type": "Document",
@@ -551,8 +523,7 @@
               "RelativeToolTip": "DTO\\PrivateVaultInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T02:07:35.857Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T02:07:35.857Z"
             },
             {
               "$type": "Document",
@@ -564,8 +535,7 @@
               "RelativeToolTip": "DTO\\RefreshTokenDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T22:27:27.411Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-13T22:27:27.411Z"
             },
             {
               "$type": "Document",
@@ -577,8 +547,7 @@
               "RelativeToolTip": "DTO\\UserInfoDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T04:49:33.911Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T04:49:33.911Z"
             },
             {
               "$type": "Document",
@@ -590,8 +559,7 @@
               "RelativeToolTip": "DTO\\NameDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T23:38:10.751Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T23:38:10.751Z"
             },
             {
               "$type": "Document",
@@ -603,8 +571,7 @@
               "RelativeToolTip": "DTO\\BookmarkPatchDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-23T21:09:41.907Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-23T21:09:41.907Z"
             },
             {
               "$type": "Document",
@@ -616,8 +583,7 @@
               "RelativeToolTip": "DTO\\MemberDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-23T04:12:52.7Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-23T04:12:52.7Z"
             },
             {
               "$type": "Document",
@@ -629,8 +595,7 @@
               "RelativeToolTip": "DTO\\UserPatchDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-23T20:03:55.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-23T20:03:55.438Z"
             },
             {
               "$type": "Document",
@@ -642,8 +607,7 @@
               "RelativeToolTip": "DTO\\TokensDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:57:04.691Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:57:04.691Z"
             },
             {
               "$type": "Document",
@@ -655,8 +619,7 @@
               "RelativeToolTip": "DTO\\NewUserDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T22:50:28.077Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T22:50:28.077Z"
             }
           ]
         }
