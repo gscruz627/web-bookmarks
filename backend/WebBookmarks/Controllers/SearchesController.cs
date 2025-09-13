@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebBookmarks.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WebBookmarks.Controllers
 {

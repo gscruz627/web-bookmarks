@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebBookmarks")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3bc154286753257035e20bc8acfad4ae75ea061d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23ba143c5ffafd327fafbc4a49fa1aa3dd3af956")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebBookmarks")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebBookmarks")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
