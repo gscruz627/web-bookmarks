@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Security.Claims;
 using WebBookmarks.Data;
 using WebBookmarks.DTO;
@@ -123,7 +124,7 @@ namespace WebBookmarks.Controllers
             {
                 await dbcontext.SaveChangesAsync();
             }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627) // 2627 = PK violation
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
             {
                 /* I could not find the source of this issue in some cases, whether the user is already on this 
                  team oor not, a PK duplicate error is thrown, the join table may correctly add a new record
