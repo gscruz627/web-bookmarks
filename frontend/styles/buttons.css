@@ -1,0 +1,35 @@
+button{
+  cursor:pointer !important;
+}
+.blue-button{
+    background-color: #266fd5;
+    color:#FFF;
+    font-weight: bolder;
+    font-size:20px;
+    border-radius:5px;
+    padding:0.5rem;
+    min-width:200px;
+    outline:none; border:none;
+}
+
+.blue-inverted-button{
+    background-color: transparent;
+    color:#266fd5;
+    font-weight: bolder;
+    font-size:20px;
+    border-radius:5px;
+    padding:0.5rem;
+    min-width:200px;
+    border:1px solid #266fd5;
+    outline:none;
+}
+
+.blue-inverted-button:hover{
+  color:#FFF;
+  background-color: #266fd5;
+}
+
+
+button i{
+  font-size:16px;
+}

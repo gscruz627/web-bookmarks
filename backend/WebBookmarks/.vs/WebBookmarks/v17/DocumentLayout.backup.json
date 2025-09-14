@@ -1,0 +1,661 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250914043524_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250914043524_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\errorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\errorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\teamscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\teamscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\data\\bookmarksdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:data\\bookmarksdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\searchescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\searchescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\privatevaultscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\privatevaultscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\privatebookmarkscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\privatebookmarkscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\bookmarkscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\bookmarkscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\webbookmarks.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:webbookmarks.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\teamcontentsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\teamcontentsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\teaminfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\teaminfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\controllers\\folderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:controllers\\folderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\privatebookmarkinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\privatebookmarkinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\privatebookmarkdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\privatebookmarkdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\folderinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\folderinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\bookmarkinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\bookmarkinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\bookmark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\bookmark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\folder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\folder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\privatebookmark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\privatebookmark.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\privatevault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\privatevault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\models\\team.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:models\\team.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\bookmarkdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\bookmarkdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\teamdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\teamdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\foldercontentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\foldercontentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\folderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\folderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\privatevaultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\privatevaultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\privatevaultinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\privatevaultinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\userinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\userinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\refreshtokendto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\refreshtokendto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\bookmarkpatchdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\bookmarkpatchdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\userpatchdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\userpatchdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\memberdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\memberdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\namedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\namedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\tokensdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\tokensdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|c:\\users\\gustavo\\desktop\\webbookmarks\\backend\\webbookmarks\\dto\\newuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{715F70E9-286E-49A3-82A5-9ED28CDBC679}|WebBookmarks.csproj|solutionrelative:dto\\newuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20250914043524_Initial.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250914043524_Initial.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250914043524_Initial.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Migrations\\20250914043524_Initial.cs",
+              "RelativeToolTip": "Migrations\\20250914043524_Initial.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T04:35:25.07Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ErrorsController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\ErrorsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ErrorsController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\ErrorsController.cs",
+              "RelativeToolTip": "Controllers\\ErrorsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-14T03:22:45.668Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
+              "RelativeDocumentMoniker": "Dockerfile",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Dockerfile",
+              "RelativeToolTip": "Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-14T21:47:22.854Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PrivateBookmarksController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateBookmarksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PrivateBookmarksController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateBookmarksController.cs",
+              "RelativeToolTip": "Controllers\\PrivateBookmarksController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T03:42:33.27Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "PrivateVaultsController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateVaultsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PrivateVaultsController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\PrivateVaultsController.cs",
+              "RelativeToolTip": "Controllers\\PrivateVaultsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T19:52:53.12Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SearchesController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\SearchesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SearchesController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\SearchesController.cs",
+              "RelativeToolTip": "Controllers\\SearchesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:36:43.85Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:38:41.583Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BookmarksDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Data\\BookmarksDBContext.cs",
+              "RelativeDocumentMoniker": "Data\\BookmarksDBContext.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Data\\BookmarksDBContext.cs",
+              "RelativeToolTip": "Data\\BookmarksDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:17:16.546Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwA0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:14:03.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TeamsController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\TeamsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TeamsController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\TeamsController.cs",
+              "RelativeToolTip": "Controllers\\TeamsController.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAjwH8AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-20T22:15:49.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BookmarksController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\BookmarksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BookmarksController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\BookmarksController.cs",
+              "RelativeToolTip": "Controllers\\BookmarksController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-16T16:36:22.775Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "WebBookmarks.csproj",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\WebBookmarks.csproj",
+              "RelativeDocumentMoniker": "WebBookmarks.csproj",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\WebBookmarks.csproj",
+              "RelativeToolTip": "WebBookmarks.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-08T03:25:01.524Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TeamInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\TeamInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamInfoDTO.cs",
+              "RelativeToolTip": "DTO\\TeamInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T23:37:58.589Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "FoldersController.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\FoldersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\FoldersController.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Controllers\\FoldersController.cs",
+              "RelativeToolTip": "Controllers\\FoldersController.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAABEwLEAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T02:43:05.208Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PrivateBookmarkInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\PrivateBookmarkInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkInfoDTO.cs",
+              "RelativeToolTip": "DTO\\PrivateBookmarkInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T02:18:26.699Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PrivateBookmarkDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\PrivateBookmarkDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateBookmarkDTO.cs",
+              "RelativeToolTip": "DTO\\PrivateBookmarkDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:24:59.783Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TeamContentsDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamContentsDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\TeamContentsDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamContentsDTO.cs",
+              "RelativeToolTip": "DTO\\TeamContentsDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T22:26:25.027Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "FolderInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\FolderInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderInfoDTO.cs",
+              "RelativeToolTip": "DTO\\FolderInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T02:37:16.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "BookmarkInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\BookmarkInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkInfoDTO.cs",
+              "RelativeToolTip": "DTO\\BookmarkInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T20:41:09.873Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Bookmark.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Bookmark.cs",
+              "RelativeDocumentMoniker": "Models\\Bookmark.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Bookmark.cs",
+              "RelativeToolTip": "Models\\Bookmark.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T16:16:53.756Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "PrivateBookmark.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateBookmark.cs",
+              "RelativeDocumentMoniker": "Models\\PrivateBookmark.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateBookmark.cs",
+              "RelativeToolTip": "Models\\PrivateBookmark.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T03:28:55.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Team.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Team.cs",
+              "RelativeDocumentMoniker": "Models\\Team.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Team.cs",
+              "RelativeToolTip": "Models\\Team.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-20T22:38:30.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "BookmarkDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\BookmarkDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkDTO.cs",
+              "RelativeToolTip": "DTO\\BookmarkDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T04:38:26.332Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Folder.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Folder.cs",
+              "RelativeDocumentMoniker": "Models\\Folder.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\Folder.cs",
+              "RelativeToolTip": "Models\\Folder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T02:40:51.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "PrivateVault.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateVault.cs",
+              "RelativeDocumentMoniker": "Models\\PrivateVault.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\PrivateVault.cs",
+              "RelativeToolTip": "Models\\PrivateVault.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T19:49:03.297Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:20:06.73Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-12T23:01:34.632Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "TeamDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\TeamDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TeamDTO.cs",
+              "RelativeToolTip": "DTO\\TeamDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T00:14:35.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "FolderDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\FolderDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderDTO.cs",
+              "RelativeToolTip": "DTO\\FolderDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T02:37:02.984Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "FolderContentDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderContentDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\FolderContentDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\FolderContentDTO.cs",
+              "RelativeToolTip": "DTO\\FolderContentDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T02:49:48.615Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "PrivateVaultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateVaultDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\PrivateVaultDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateVaultDTO.cs",
+              "RelativeToolTip": "DTO\\PrivateVaultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAABOwAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T16:21:04.362Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "PrivateVaultInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateVaultInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\PrivateVaultInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\PrivateVaultInfoDTO.cs",
+              "RelativeToolTip": "DTO\\PrivateVaultInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T02:07:35.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "RefreshTokenDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\RefreshTokenDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\RefreshTokenDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\RefreshTokenDTO.cs",
+              "RelativeToolTip": "DTO\\RefreshTokenDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-13T22:27:27.411Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "UserInfoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\UserInfoDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\UserInfoDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\UserInfoDTO.cs",
+              "RelativeToolTip": "DTO\\UserInfoDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T04:49:33.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "NameDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\NameDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\NameDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\NameDTO.cs",
+              "RelativeToolTip": "DTO\\NameDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-22T23:38:10.751Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "BookmarkPatchDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkPatchDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\BookmarkPatchDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\BookmarkPatchDTO.cs",
+              "RelativeToolTip": "DTO\\BookmarkPatchDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-23T21:09:41.907Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "MemberDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\MemberDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\MemberDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\MemberDTO.cs",
+              "RelativeToolTip": "DTO\\MemberDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-23T04:12:52.7Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "UserPatchDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\UserPatchDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\UserPatchDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\UserPatchDTO.cs",
+              "RelativeToolTip": "DTO\\UserPatchDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-23T20:03:55.438Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "TokensDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TokensDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\TokensDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\TokensDTO.cs",
+              "RelativeToolTip": "DTO\\TokensDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:57:04.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "NewUserDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\NewUserDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\NewUserDTO.cs",
+              "ToolTip": "C:\\Users\\Gustavo\\Desktop\\webbookmarks\\backend\\WebBookmarks\\DTO\\NewUserDTO.cs",
+              "RelativeToolTip": "DTO\\NewUserDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-12T22:50:28.077Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
